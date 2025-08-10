@@ -831,3 +831,202 @@ input:hover {
 	position: relative;
 	max-width: 300px;
 }
+
+/* Admin Plugin Styles */
+.user-generator {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 15px;
+	padding: 25px;
+	margin: 20px 0;
+	border: 1px solid rgba(74, 124, 89, 0.3);
+}
+
+.user-generator .input-group {
+	margin-bottom: 20px;
+}
+
+.user-generator label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: #4a7c59;
+	font-weight: 600;
+	margin-bottom: 8px;
+	font-size: 0.95em;
+}
+
+.user-generator label i {
+	color: #6b8e23;
+	font-size: 1.1em;
+}
+
+.user-generator input {
+	width: 100%;
+	padding: 12px 16px;
+	border: 2px solid rgba(74, 124, 89, 0.3);
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.1);
+	color: #fff;
+	font-size: 1em;
+	transition: all 0.3s ease;
+}
+
+.user-generator input:focus {
+	outline: none;
+	border-color: #4a7c59;
+	box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.2);
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.user-generator input::placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.generate-btn {
+	background: linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%);
+	color: white;
+	border: none;
+	padding: 14px 28px;
+	border-radius: 10px;
+	font-size: 1em;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	box-shadow: 0 4px 15px rgba(74, 124, 89, 0.3);
+	width: 100%;
+}
+
+.generate-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(74, 124, 89, 0.4);
+	background: linear-gradient(135deg, #5a8c69 0%, #7b9e33 100%);
+}
+
+.generate-btn:active {
+	transform: translateY(0);
+}
+
+.generate-btn i {
+	font-size: 1.1em;
+}
+
+.credentials-display {
+	background: rgba(74, 124, 89, 0.1);
+	border: 2px solid #4a7c59;
+	border-radius: 12px;
+	padding: 20px;
+	margin-top: 20px;
+	text-align: center;
+}
+
+.credentials-display h3 {
+	color: #4a7c59;
+	margin: 0 0 15px 0;
+	font-size: 1.2em;
+}
+
+.credential-item {
+	margin-bottom: 10px;
+	color: #fff;
+	font-size: 1em;
+}
+
+.credential-item strong {
+	color: #6b8e23;
+}
+
+.copy-btn {
+	background: #6b8e23;
+	color: white;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 8px;
+	font-size: 0.9em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: 15px;
+}
+
+.copy-btn:hover {
+	background: #7b9e33;
+	transform: translateY(-1px);
+}
+
+.copy-btn i {
+	font-size: 0.9em;
+}
+
+.current-users {
+	margin-top: 30px;
+}
+
+.current-users h3 {
+	color: #4a7c59;
+	margin-bottom: 15px;
+	font-size: 1.1em;
+}
+
+.users-list {
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+	padding: 15px;
+	max-height: 300px;
+	overflow-y: auto;
+}
+
+.user-item {
+	background: rgba(74, 124, 89, 0.1);
+	border: 1px solid rgba(74, 124, 89, 0.3);
+	border-radius: 8px;
+	padding: 15px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.user-info {
+	flex: 1;
+}
+
+.user-name {
+	color: #fff;
+	font-weight: 600;
+	margin-bottom: 5px;
+}
+
+.user-expiry {
+	color: #ccc;
+	font-size: 0.9em;
+}
+
+.user-actions {
+	display: flex;
+	gap: 10px;
+}
+
+.delete-user {
+	background: #d32f2f;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	font-size: 0.8em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.delete-user:hover {
+	background: #f44336;
+}
+
+.hidden {
+	display: none !important;
+}

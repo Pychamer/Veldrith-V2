@@ -397,7 +397,62 @@
 				<h1 style="animation: fade-in-left 1s" class="settingsection2">
 					Plugins
 				</h1>
-				<div class="settingsection settingsection2">
+				<div class="settingsection settingsection2" id="adminPlugin" style="display: none;">
+					<h1>User Management</h1>
+					<p>
+						Generate temporary user accounts with custom expiration dates.
+						<strong>Admin Only</strong>
+					</p>
+					
+					<div class="user-generator">
+						<div class="input-group">
+							<label for="newUsername">
+								<i class="fa-solid fa-user"></i>
+								Username
+							</label>
+							<input type="text" id="newUsername" placeholder="Enter username" />
+						</div>
+						
+						<div class="input-group">
+							<label for="expirationDays">
+								<i class="fa-solid fa-calendar"></i>
+								Expiration (days)
+							</label>
+							<input type="number" id="expirationDays" placeholder="30" min="1" max="365" />
+						</div>
+						
+						<button id="generateUser" class="generate-btn">
+							<i class="fa-solid fa-plus"></i>
+							Generate User
+						</button>
+						
+						<div id="generatedCredentials" class="credentials-display hidden">
+							<h3>Generated Credentials</h3>
+							<div class="credential-item">
+								<strong>Username:</strong> <span id="genUsername"></span>
+							</div>
+							<div class="credential-item">
+								<strong>Password:</strong> <span id="genPassword"></span>
+							</div>
+							<div class="credential-item">
+								<strong>Expires:</strong> <span id="genExpiry"></span>
+							</div>
+							<button id="copyCredentials" class="copy-btn">
+								<i class="fa-solid fa-copy"></i>
+								Copy to Clipboard
+							</button>
+						</div>
+					</div>
+					
+					<div class="current-users">
+						<h3>Current Users</h3>
+						<div id="usersList" class="users-list">
+							<!-- Users will be populated here -->
+						</div>
+					</div>
+				</div>
+				
+				<div class="settingsection settingsection2" id="regularPlugin">
 					<h1>Coming Soon</h1>
 					<p>
 						Plugins will be added soon to Veldrith. While you wait, you
@@ -1414,6 +1469,8 @@
 		<script src="/js/c.js"></script>
 		<script src="/js/~.js"></script>
 		<script src="/js/themes.js"></script>
+		<script src="/js/admin-plugin.js"></script>
+		<script src="/js/auth-guard.js"></script>
 		<script type="text/javascript">
 			document.addEventListener('DOMContentLoaded', function () {
 				let hideAds = localStorage.getItem('hideAds');
