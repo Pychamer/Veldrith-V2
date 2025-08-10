@@ -9,7 +9,7 @@
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Wood texture background */
+/* Forest background with trees */
 .wood-bg {
 	position: absolute;
 	top: 0;
@@ -17,14 +17,44 @@
 	width: 100%;
 	height: 100%;
 	background: 
-		linear-gradient(45deg, #8B4513 25%, transparent 25%),
-		linear-gradient(-45deg, #8B4513 25%, transparent 25%),
-		linear-gradient(45deg, transparent 75%, #8B4513 75%),
-		linear-gradient(-45deg, transparent 75%, #8B4513 75%);
-	background-size: 20px 20px;
-	background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-	background-color: #A0522D;
-	opacity: 0.8;
+		/* Base forest color */
+		linear-gradient(to bottom, #1a3d1a 0%, #2d4a2d 50%, #1a3d1a 100%),
+		/* Tree trunks */
+		radial-gradient(ellipse at 20% 80%, #3d2f1f 0%, transparent 30%),
+		radial-gradient(ellipse at 80% 70%, #3d2f1f 0%, transparent 35%),
+		radial-gradient(ellipse at 40% 90%, #3d2f1f 0%, transparent 25%),
+		radial-gradient(ellipse at 90% 20%, #3d2f1f 0%, transparent 30%),
+		radial-gradient(ellipse at 10% 30%, #3d2f1f 0%, transparent 25%),
+		/* Tree foliage */
+		radial-gradient(ellipse at 20% 60%, #4a7c59 0%, transparent 40%),
+		radial-gradient(ellipse at 80% 50%, #6b8e23 0%, transparent 45%),
+		radial-gradient(ellipse at 40% 70%, #8fbc8f 0%, transparent 35%),
+		radial-gradient(ellipse at 90% 10%, #90ee90 0%, transparent 40%),
+		radial-gradient(ellipse at 10% 20%, #98fb98 0%, transparent 30%);
+	background-size: 
+		100% 100%,
+		200px 200px,
+		180px 180px,
+		160px 160px,
+		140px 140px,
+		120px 120px,
+		200px 200px,
+		180px 180px,
+		160px 160px,
+		140px 140px;
+	background-position: 
+		0 0,
+		20% 80%,
+		80% 70%,
+		40% 90%,
+		90% 20%,
+		10% 30%,
+		20% 60%,
+		80% 50%,
+		40% 70%,
+		90% 10%,
+		10% 20%;
+	opacity: 0.9;
 }
 
 .wood-bg::before {
@@ -35,9 +65,38 @@
 	width: 100%;
 	height: 100%;
 	background: 
-		radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.3) 0%, transparent 50%),
-		radial-gradient(circle at 80% 20%, rgba(160, 82, 45, 0.3) 0%, transparent 50%),
-		radial-gradient(circle at 40% 40%, rgba(205, 133, 63, 0.2) 0%, transparent 50%);
+		/* Additional tree layers for depth */
+		radial-gradient(ellipse at 60% 40%, #2d4a2d 0%, transparent 50%),
+		radial-gradient(ellipse at 30% 80%, #4a7c59 0%, transparent 40%),
+		radial-gradient(ellipse at 70% 90%, #6b8e23 0%, transparent 35%);
+	background-size: 
+		150px 150px,
+		120px 120px,
+		100px 100px;
+	background-position: 
+		60% 40%,
+		30% 80%,
+		70% 90%;
+}
+
+/* Tree silhouettes in background */
+.wood-bg::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 40%;
+	background: 
+		/* Tree trunk silhouettes */
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 0% 100% / 60px 100%,
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 20% 100% / 40px 100%,
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 40% 100% / 80px 100%,
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 60% 100% / 50px 100%,
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 80% 100% / 70px 100%,
+		linear-gradient(to top, #3d2f1f 0%, transparent 100%) 90% 100% / 45px 100%;
+	background-repeat: no-repeat;
+	opacity: 0.6;
 }
 
 /* Floating leaves */
@@ -55,10 +114,17 @@
 	position: absolute;
 	width: 20px;
 	height: 20px;
-	background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMTAgMkMxMiAyIDEzLjUgMy41IDEzLjUgNS41QzEzLjUgNy41IDEyIDkgMTAgOUM4IDkgNi41IDcuNSA2LjUgNS41QzYuNSAzLjUgOCAyIDEwIDJaTTEwIDExQzEyIDExIDEzLjUgMTIuNSAxMy41IDE0LjVDMTMuNSAxNi41IDEyIDE4IDEwIDE4QzggMTggNi41IDE2LjUgNi41IDE0LjVDNi41IDEyLjUgOCAxMSAxMCAxMVoiIGZpbGw9IiM0YTdjNTkiLz4KPC9zdmc+') no-repeat center;
-	background-size: contain;
-	opacity: 0.7;
+	background: 
+		/* Pixelated leaf pattern */
+		linear-gradient(45deg, transparent 40%, #4a7c59 40%, #4a7c59 60%, transparent 60%),
+		linear-gradient(-45deg, transparent 40%, #6b8e23 40%, #6b8e23 60%, transparent 60%),
+		/* Leaf center */
+		radial-gradient(circle at 50% 50%, #8fbc8f 0%, #4a7c59 70%, transparent 70%);
+	background-size: 20px 20px, 20px 20px, 20px 20px;
+	background-position: 0 0, 0 0, 0 0;
+	opacity: 0.8;
 	animation: float 6s ease-in-out infinite;
+	border-radius: 2px;
 }
 
 .leaf-1 {
@@ -116,18 +182,23 @@
 
 /* Login form container */
 .login-form-container {
-	background: rgba(255, 255, 255, 0.95);
+	background: 
+		/* Wood grain texture */
+		linear-gradient(90deg, rgba(139, 69, 19, 0.1) 0%, transparent 20%, rgba(160, 82, 45, 0.1) 40%, transparent 60%, rgba(139, 69, 19, 0.1) 80%),
+		/* Base semi-transparent white */
+		rgba(255, 255, 255, 0.95);
 	backdrop-filter: blur(10px);
 	border-radius: 20px;
 	padding: 40px;
 	box-shadow: 
 		0 20px 40px rgba(0, 0, 0, 0.3),
-		0 0 0 1px rgba(255, 255, 255, 0.1);
+		0 0 0 1px rgba(139, 69, 19, 0.3),
+		inset 0 0 20px rgba(139, 69, 19, 0.1);
 	max-width: 400px;
 	width: 90%;
 	position: relative;
 	z-index: 2;
-	border: 2px solid rgba(139, 69, 19, 0.3);
+	border: 3px solid rgba(139, 69, 19, 0.5);
 }
 
 .login-header {
@@ -147,6 +218,54 @@
 	font-size: 2.2em;
 	margin: 0 0 10px 0;
 	font-weight: 600;
+	position: relative;
+	display: inline-block;
+	padding: 15px 25px;
+	background: 
+		/* Log texture */
+		linear-gradient(45deg, #8B4513 25%, transparent 25%),
+		linear-gradient(-45deg, #8B4513 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, #8B4513 75%),
+		linear-gradient(-45deg, transparent 75%, #8B4513 75%);
+	background-size: 8px 8px;
+	background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+	background-color: #A0522D;
+	border-radius: 15px;
+	border: 3px solid #654321;
+	box-shadow: 
+		inset 0 0 20px rgba(0, 0, 0, 0.3),
+		0 8px 25px rgba(0, 0, 0, 0.4);
+	transform: rotate(-1deg);
+}
+
+.login-header h1::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 20px;
+	height: 20px;
+	background: #4a7c59;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+	animation: leafSway 3s ease-in-out infinite;
+}
+
+.login-header h1::after {
+	content: '';
+	position: absolute;
+	top: -5px;
+	right: -15px;
+	width: 15px;
+	height: 15px;
+	background: #6b8e23;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+	animation: leafSway 2.5s ease-in-out infinite reverse;
+}
+
+@keyframes leafSway {
+	0%, 100% { transform: rotate(-5deg); }
+	50% { transform: rotate(5deg); }
 }
 
 .login-header p {
