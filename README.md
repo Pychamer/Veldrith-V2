@@ -1,6 +1,6 @@
 <div align="center">
         <img src="https://i.imgur.com/OMo4cMz.png" style="width: 1200px"/>
-    <h2>Launch into Space, the next gen proxy.</h2>
+    <h2>Launch into Veldrith, the next gen proxy.</h2>
 </div>
 
 ![inpreview](https://i.imgur.com/VhNNgOs.jpeg)
@@ -22,14 +22,14 @@
 ## Deployment
 
 > [!WARNING]
-> You **can not** host Space locally via a static web hosting site
+> You **can not** host Veldrith locally via a static web hosting site
 > such as Netlify, Github Pages, and Cloudflare Pages.
 
 Please run the following commands to host a server:
 
 ```
-git clone https://github.com/NightProxy/space.git
-cd Space
+git clone https://github.com/NightProxy/veldrith.git
+cd Veldrith
 pnpm i
 pnpm start
 ```
@@ -40,28 +40,23 @@ pnpm start
 git pull --force --allow-unrelated-histories
 ```
 
-<a target="_blank" href="https://heroku.com/deploy/?template=https://github.com/NightProxy/Space"><img alt="Deploy to Heroku" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/heroku.svg"></a>
-<a target="_blank" href="https://app.koyeb.com/deploy?type=git&repository=github.com/NightProxy/Space"><img alt="Deploy to Koyeb" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/koyeb.svg"></a>
-<a target="_blank" href="https://app.cyclic.sh/api/app/deploy/NightProxy/Space"><img alt="Deploy to Cyclic" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/cyclic.svg"></a>
+<a target="_blank" href="https://heroku.com/deploy/?template=https://github.com/NightProxy/Veldrith"><img alt="Deploy to Heroku" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/heroku.svg"></a>
+<a target="_blank" href="https://app.koyeb.com/deploy?type=git&repository=github.com/NightProxy/Veldrith"><img alt="Deploy to Koyeb" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/koyeb.svg"></a>
+<a target="_blank" href="https://app.cyclic.sh/api/app/deploy/NightProxy/Veldrith"><img alt="Deploy to Cyclic" src="https://binbashbanana.github.io/deploy-buttons/buttons/remade/cyclic.svg"></a>
 
 ## Where to ask for help
 
 > [!NOTE]
-> If you'd like to get links, support, or other deployment methods join
-> our [Discord Server](https://discord.gointospace.app) or open a discussion.
+> If you'd like to get links, support, or other deployment methods, please open a discussion.
 
 ## Contribution
 
-To contribute to Space, clone the repo locally and submit your code in a pull
+To contribute to Veldrith, clone the repo locally and submit your code in a pull
 request. If you are making large changes, please make sure you test your code
-before submitting a pull request. Please check [contributing.md](https://github.com/NightProxy/Space/blob/main/contributing.md) for a more in-depth explanation.
+before submitting a pull request. Please check [contributing.md](https://github.com/NightProxy/Veldrith/blob/main/contributing.md) for a more in-depth explanation.
 
 ## Contributors
 
-Thank you to the following people for contributing to Space.
+Thank you to the following people for contributing to Veldrith.
 
-[![Contributors](https://contrib.rocks/image?repo=nightproxy/space)](https://github.com/NightProxy/Space/graphs/contributors)
-
-## Discord
-
-[![Discord](https://invidget.switchblade.xyz/QmWUfvm4bn?theme=dark)](https://discord.gointospace.app)
+[![Contributors](https://contrib.rocks/image?repo=nightproxy/veldrith)](https://github.com/NightProxy/Veldrith/graphs/contributors)

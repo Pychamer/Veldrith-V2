@@ -1,5 +1,5 @@
 {
-	"name": "space",
+	"name": "veldrith",
 	"version": "1.1.0",
 	"type": "module",
 	"main": "index.js",
@@ -8,12 +8,12 @@
 		"format": "prettier --write ."
 	},
 	"keywords": [
-		"Space",
+		"Veldrith",
 		"Proxy",
 		"Unblocker",
-		"Space",
+		"Veldrith",
 		"Proxy",
-		"Space",
+		"Veldrith",
 		"Unblocker"
 	],
 	"author": "xnoctra <x.noctra@outlook.com>; crllect <crllect@proton.me>",

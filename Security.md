@@ -24,5 +24,6 @@ The current version of Space is **v1.0.0**
 
 If you are having issues with your repository and/or its versions, you can
 submit a discussion or open a ticket in our
-[Discord](https://discord.gointospace.app) and we will try to reach you ASAP.
-Thank you for using Space.
+email at security@veldrith.app and we will try to reach you ASAP.
+Thank you for using Veldrith.
+Please report security vulnerabilities to us via email at security@veldrith.app and we will try to reach you ASAP.

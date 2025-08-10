@@ -70,7 +70,7 @@ There is currently no windows version of the script, because I dont like batch a
 > [!NOTE]
 > The all category is required on all additions, however more descriptive ones are optional.
 
-If you are unsure about something or want some clarification on any of these specifications, feel free to join the [discord](https://discord.gointospace.app) where a member of our team will gladly answer your questions!
+If you are unsure about something or want some clarification on any of these specifications, feel free to open a discussion where a member of our team will gladly answer your questions!
 
 <h1></h1>
 
