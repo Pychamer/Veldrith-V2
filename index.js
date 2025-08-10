@@ -41,7 +41,7 @@ server.on('upgrade', (req, socket, head) => {
 
 server.on('listening', () => {
 	const address = server.address();
-	const theme = chalk.hex('#8F00FF');
+		const theme = chalk.hex('#2e7d32');
 	const host = chalk.hex('0d52bd');
 	console.log(
 		chalk.bold(
@@ -52,11 +52,11 @@ server.on('listening', () => {
 	╚════██║██╔═══╝ ██╔══██║██║     ██╔══╝  
 	███████║██║     ██║  ██║╚██████╗███████╗
 	╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝╚══════╝
-											
+												
 	`)
 		)
 	);
-	console.log(
+console.log(
 		`  ${chalk.bold(host('Local System:'))}            http://${address.family === 'IPv6' ? `[${address.address}]` : address.address}${address.port === 80 ? '' : ':' + chalk.bold(address.port)}`
 	);
 

@@ -117,7 +117,7 @@
 	animation: baractiveani 10s linear infinite;
 	width: 3px;
 	height: 35px;
-	background: hsl(270, 100%, 50%);
+	background: var(--dshadow2);
 	border-top-right-radius: 999px;
 	border-bottom-right-radius: 999px;
 	margin-left: -20px;

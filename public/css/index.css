@@ -3,8 +3,8 @@
 
 :root {
 	--background-color: #000;
-	--header-active-background-color: rgba(140, 0, 255, 0.55);
-	--header-hover-background-color: rgba(140, 0, 255, 0.13);
+	--header-active-background-color: rgba(46, 125, 50, 0.55);
+	--header-hover-background-color: rgba(76, 175, 80, 0.13);
 	--input-background-color: #0a0a0a;
 	--border-color: #525252;
 	--text-color: #ffffff;
@@ -17,12 +17,12 @@
 	--page-text-color: rgba(82, 82, 82, 0.97);
 	--shortcut-background-color: #fff;
 	--shortcut-box-shadow: 0 0 20px 1px #fff;
-	--image-outline-color: #4400ff;
-	--button-background-color: #4400ff;
+	--image-outline-color: #2e7d32;
+	--button-background-color: #2e7d32;
 	--button-gradient-color: linear-gradient(
 		304deg,
-		rgb(204, 0, 245) 0%,
-		#4400ff 100%
+		#1b5e20 0%,
+		#66bb6a 100%
 	);
 	--scrolltop-background-color: rgba(32, 32, 32, 0.37);
 	--scrolltop-backdrop-filter: blur(10px);
@@ -31,7 +31,7 @@
 	--random-btn-active-background-color: rgb(15, 15, 15);
 	--settingsection-background-color: #0c0c0c;
 	--settingsection-background-color-hover: #101010;
-	--link-hover-color: #7d2ae8;
+	--link-hover-color: #81c784;
 	--settingsection-hr-background: rgba(255, 255, 255, 0.22);
 	--button-reg-background-color: rgb(22, 22, 22);
 	--button-reg-hover-background-color: rgb(25, 25, 25);
@@ -52,13 +52,13 @@
 		rgba(0, 255, 0, 0.145) 0%,
 		rgba(255, 255, 255, 0) 45%
 	);
-	--slider-background-color: #d84f68;
-	--slider-box-shadow: inset 1px 1px 2px 0px #ff7ca7;
-	--checkbox-background-color: rgb(255, 169, 250);
+	--slider-background-color: #3e8e41;
+	--slider-box-shadow: inset 1px 1px 2px 0px #a5d6a7;
+	--checkbox-background-color: rgb(167, 255, 190);
 	--checkbox-gradient: linear-gradient(
 		126deg,
-		rgba(255, 169, 250, 1) 0%,
-		rgba(73, 24, 255, 1) 100%
+		#a5d6a7 0%,
+		#66bb6a 100%
 	);
 	--password-background-color: #252525;
 	--password-hover-background-color: #181818;
@@ -67,33 +67,33 @@
 	--color-header: '#fff';
 	--accent-color: linear-gradient(
 		101deg,
-		#4400ff7e 0%,
-		rgba(242, 0, 255, 0.336) 100%
+		rgba(76, 175, 80, 0.5) 0%,
+		rgba(139, 195, 74, 0.4) 100%
 	) !important;
 	--color-header: #ff0000 !important;
-	--dshadow1: #ae00ff;
-	--dshadow2: #4400ff;
-	--dshadow3: #ff00d4;
-	--dshadow4: #8400ff;
+	--dshadow1: #1b5e20;
+	--dshadow2: #2e7d32;
+	--dshadow3: #66bb6a;
+	--dshadow4: #2e7d32;
 }
 
 #changelogfy-launcher {
-	background: rgba(247, 0, 255, 0.514) !important;
+	background: rgba(76, 175, 80, 0.45) !important;
 	background: linear-gradient(
 		101deg,
-		#4400ff7e 0%,
-		rgba(242, 0, 255, 0.336) 100%
+		rgba(76, 175, 80, 0.5) 0%,
+		rgba(139, 195, 74, 0.4) 100%
 	) !important;
 	backdrop-filter: blur(7px);
 	opacity: 0.9;
 }
 
 .flex.flex-1.justify-between.relative.z-10.px-5.py-5.sm\:px-8 {
-	background: rgba(247, 0, 255, 0.514) !important;
+	background: rgba(76, 175, 80, 0.45) !important;
 	background: linear-gradient(
 		101deg,
-		#4400ff7e 0%,
-		rgba(242, 0, 255, 0.336) 100%
+		rgba(76, 175, 80, 0.5) 0%,
+		rgba(139, 195, 74, 0.4) 100%
 	) !important;
 	backdrop-filter: blur(7px) !important;
 	opacity: 0.9 !important;
@@ -1127,4 +1127,55 @@ input:hover {
 
 .toast.active ~ button {
 	pointer-events: none;
+}
+
+/* Forest parallax background (Terraria-style) */
+.forest {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 32vh;
+	pointer-events: none;
+	z-index: -997;
+	overflow: hidden;
+}
+
+.forest .layer {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 40%;
+	background-repeat: repeat-x;
+	background-size: 600px auto;
+	animation: forestPan 80s linear infinite;
+	opacity: 0.9;
+}
+
+.forest .back {
+	height: 45%;
+	animation-duration: 120s;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='200' viewBox='0 0 600 200'><rect width='600' height='200' fill='transparent'/><g fill='%230e2d12'><polygon points='40,180 70,120 100,180'/><rect x='67' y='180' width='6' height='20' fill='%23081f0c'/><polygon points='160,182 190,125 220,182'/><rect x='187' y='182' width='6' height='18' fill='%23081f0c'/><polygon points='280,178 310,120 340,178'/><rect x='307' y='178' width='6' height='22' fill='%23081f0c'/><polygon points='420,184 450,128 480,184'/><rect x='447' y='184' width='6' height='16' fill='%23081f0c'/><polygon points='520,180 545,130 570,180'/><rect x='543' y='180' width='6' height='20' fill='%23081f0c'/></g></svg>");
+}
+
+.forest .mid {
+	height: 60%;
+	animation-duration: 80s;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='240' viewBox='0 0 600 240'><rect width='600' height='240' fill='transparent'/><g fill='%2312421a'><polygon points='20,210 55,135 90,210'/><rect x='53' y='210' width='8' height='30' fill='%230d3314'/><polygon points='140,215 175,140 210,215'/><rect x='173' y='215' width='8' height='25' fill='%230d3314'/><polygon points='260,208 295,132 330,208'/><rect x='293' y='208' width='8' height='32' fill='%230d3314'/><polygon points='380,220 415,145 450,220'/><rect x='413' y='220' width='8' height='20' fill='%230d3314'/><polygon points='500,212 535,138 570,212'/><rect x='533' y='212' width='8' height='28' fill='%230d3314'/></g></svg>");
+}
+
+.forest .front {
+	height: 80%;
+	animation-duration: 50s;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='280' viewBox='0 0 600 280'><rect width='600' height='280' fill='transparent'/><g fill='%231b5e20'><polygon points='30,250 70,160 110,250'/><rect x='67' y='250' width='10' height='40' fill='%230f3d16'/><polygon points='160,255 200,165 240,255'/><rect x='197' y='255' width='10' height='35' fill='%230f3d16'/><polygon points='290,248 330,158 370,248'/><rect x='327' y='248' width='10' height='42' fill='%230f3d16'/><polygon points='420,258 460,168 500,258'/><rect x='457' y='258' width='10' height='32' fill='%230f3d16'/><polygon points='520,252 560,162 600,252'/><rect x='557' y='252' width='10' height='38' fill='%230f3d16'/></g><rect y='270' width='600' height='10' fill='%231a3019'/></svg>");
+}
+
+@keyframes forestPan {
+	0% {
+		background-position-x: 0;
+	}
+	100% {
+		background-position-x: -1000px;
+	}
 }

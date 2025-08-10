@@ -1,16 +1,11 @@
 // ~ is the settings page, so ~.js is settings specific js that wont get loaded globally
 
-const crypto = require('crypto');
-const password = 'your-encryption-password'; // Replace with a secure password
-
 function encrypt(text) {
-    const cipher = crypto.createCipher('aes-256-ctr', password);
-    return cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+    try { return btoa(unescape(encodeURIComponent(text))); } catch (e) { return text; }
 }
 
 function decrypt(text) {
-    const decipher = crypto.createDecipher('aes-256-ctr', password);
-    return decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
+    try { return decodeURIComponent(escape(atob(text))); } catch (e) { return text; }
 }
 
 localforage.setItem('e', 'e');
@@ -849,13 +844,15 @@ document.addEventListener('DOMContentLoaded', function () {
 	const saveButton2 = document.querySelector('.pPasswordSave');
 	saveButton2.addEventListener('click', savePassword);
 
-	const pages = document.querySelectorAll('.scontent');
-	pages.forEach(page => {
-		page.style.display = 'none';
-	});
+const pages = document.querySelectorAll('.scontent');
+pages.forEach(page => {
+	page.style.display = 'none';
+});
 
-	document.getElementById('blank').style.display = 'block';
-	showPageFromHash();
+// hide loading and show page based on hash or default
+const loading = document.getElementById('loading');
+if (loading) loading.style.display = 'none';
+showPageFromHash();
 
 	const dropdownMenus = document.querySelectorAll('.dropdown-menu');
 
