@@ -86,6 +86,24 @@ class LoginSystem {
 	}
 	
 	loginUser(type, username) {
+		// Check if user is already logged in elsewhere
+		const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
+		const sessions = JSON.parse(activeSessions);
+		
+		if (sessions[username]) {
+			// User is already logged in, invalidate old session
+			const oldSession = sessions[username];
+			const oldSessionTime = new Date(oldSession.loginTime);
+			const now = new Date();
+			const hoursDiff = (now - oldSessionTime) / (1000 * 60 * 60);
+			
+			// If old session is less than 1 hour old, prevent new login
+			if (hoursDiff < 1) {
+				this.showError('This account is already in use. Please wait 1 hour or contact admin.');
+				return;
+			}
+		}
+		
 		// Store login session
 		const session = {
 			type: type,
@@ -95,6 +113,10 @@ class LoginSystem {
 		};
 		
 		localStorage.setItem('veldrith_session', JSON.stringify(session));
+		
+		// Update active sessions
+		sessions[username] = session;
+		localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
 		
 		// Redirect based on user type
 		if (type === 'admin') {

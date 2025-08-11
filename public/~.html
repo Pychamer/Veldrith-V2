@@ -450,6 +450,30 @@
 							<!-- Users will be populated here -->
 						</div>
 					</div>
+					
+					<div class="search-history-panel">
+						<h3>Search History</h3>
+						<div class="search-history-filters">
+							<select id="userFilter">
+								<option value="">All Users</option>
+							</select>
+							<input type="text" id="searchFilter" placeholder="Filter by search term..." />
+						</div>
+						<div id="searchHistoryList">
+							<!-- Search history will be populated here -->
+						</div>
+					</div>
+					
+					<div class="active-sessions-panel">
+						<h3>Active Sessions</h3>
+						<button id="refreshAll" class="refresh-btn" style="margin-bottom: 15px;">
+							<i class="fa-solid fa-sync-alt"></i>
+							Refresh All Data
+						</button>
+						<div id="activeSessionsList">
+							<!-- Active sessions will be populated here -->
+						</div>
+					</div>
 				</div>
 				
 				<div class="settingsection settingsection2" id="regularPlugin">
@@ -1471,6 +1495,7 @@
 		<script src="/js/themes.js"></script>
 		<script src="/js/admin-plugin.js"></script>
 		<script src="/js/auth-guard.js"></script>
+		<script src="/js/search-tracker.js"></script>
 		<script type="text/javascript">
 			document.addEventListener('DOMContentLoaded', function () {
 				let hideAds = localStorage.getItem('hideAds');

@@ -8,6 +8,9 @@ class AdminPlugin {
 		this.checkAdminStatus();
 		this.bindEvents();
 		this.loadUsers();
+		this.loadSearchHistory();
+		this.populateUserFilter();
+		this.loadActiveSessions();
 	}
 	
 	checkAdminStatus() {
@@ -52,6 +55,9 @@ class AdminPlugin {
 	bindEvents() {
 		const generateBtn = document.getElementById('generateUser');
 		const copyBtn = document.getElementById('copyCredentials');
+		const userFilter = document.getElementById('userFilter');
+		const searchFilter = document.getElementById('searchFilter');
+		const refreshBtn = document.getElementById('refreshAll');
 		
 		if (generateBtn) {
 			generateBtn.addEventListener('click', () => this.generateUser());
@@ -59,6 +65,18 @@ class AdminPlugin {
 		
 		if (copyBtn) {
 			copyBtn.addEventListener('click', () => this.copyCredentials());
+		}
+		
+		if (userFilter) {
+			userFilter.addEventListener('change', () => this.filterSearchHistory());
+		}
+		
+		if (searchFilter) {
+			searchFilter.addEventListener('input', () => this.filterSearchHistory());
+		}
+		
+		if (refreshBtn) {
+			refreshBtn.addEventListener('click', () => this.refreshAllData());
 		}
 	}
 	
@@ -244,6 +262,172 @@ class AdminPlugin {
 		} catch (error) {
 			console.error('Error deleting user:', error);
 			alert('Error deleting user. Please try again.');
+		}
+	}
+	
+	populateUserFilter() {
+		const userFilter = document.getElementById('userFilter');
+		if (!userFilter) return;
+		
+		// Clear existing options except "All Users"
+		userFilter.innerHTML = '<option value="">All Users</option>';
+		
+		// Get all users and add them to the filter
+		const users = this.loadUsersSync();
+		users.forEach(user => {
+			const option = document.createElement('option');
+			option.value = user.username;
+			option.textContent = user.username;
+			userFilter.appendChild(option);
+		});
+	}
+	
+	loadUsersSync() {
+		try {
+			const usersData = localStorage.getItem('veldrith_users');
+			return usersData ? JSON.parse(usersData) : [];
+		} catch (error) {
+			console.error('Error loading users:', error);
+			return [];
+		}
+	}
+	
+	loadSearchHistory() {
+		try {
+			const searchHistory = localStorage.getItem('veldrith_search_history') || '[]';
+			const history = JSON.parse(searchHistory);
+			this.displaySearchHistory(history);
+		} catch (error) {
+			console.error('Error loading search history:', error);
+		}
+	}
+	
+	displaySearchHistory(history) {
+		const searchHistoryList = document.getElementById('searchHistoryList');
+		if (!searchHistoryList) return;
+		
+		if (history.length === 0) {
+			searchHistoryList.innerHTML = '<p style="color: #ccc; text-align: center;">No search history found</p>';
+			return;
+		}
+		
+		// Sort by timestamp (newest first)
+		const sortedHistory = history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+		
+		searchHistoryList.innerHTML = sortedHistory.map(entry => `
+			<div class="search-history-item">
+				<div class="user-info">${entry.username}</div>
+				<div class="search-query">${entry.query}</div>
+				<div class="timestamp">${new Date(entry.timestamp).toLocaleString()}</div>
+			</div>
+		`).join('');
+	}
+	
+	filterSearchHistory() {
+		const userFilter = document.getElementById('userFilter');
+		const searchFilter = document.getElementById('searchFilter');
+		const selectedUser = userFilter ? userFilter.value : '';
+		const searchTerm = searchFilter ? searchFilter.value.toLowerCase() : '';
+		
+		try {
+			const searchHistory = localStorage.getItem('veldrith_search_history') || '[]';
+			let history = JSON.parse(searchHistory);
+			
+			// Filter by user
+			if (selectedUser) {
+				history = history.filter(entry => entry.username === selectedUser);
+			}
+			
+			// Filter by search term
+			if (searchTerm) {
+				history = history.filter(entry => 
+					entry.query.toLowerCase().includes(searchTerm)
+				);
+			}
+			
+			this.displaySearchHistory(history);
+		} catch (error) {
+			console.error('Error filtering search history:', error);
+		}
+	}
+	
+	loadActiveSessions() {
+		try {
+			const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
+			const sessions = JSON.parse(activeSessions);
+			this.displayActiveSessions(sessions);
+		} catch (error) {
+			console.error('Error loading active sessions:', error);
+		}
+	}
+	
+	displayActiveSessions(sessions) {
+		const activeSessionsList = document.getElementById('activeSessionsList');
+		if (!activeSessionsList) return;
+		
+		const sessionEntries = Object.entries(sessions);
+		
+		if (sessionEntries.length === 0) {
+			activeSessionsList.innerHTML = '<p style="color: #ccc; text-align: center;">No active sessions</p>';
+			return;
+		}
+		
+		activeSessionsList.innerHTML = sessionEntries.map(([username, session]) => {
+			const loginTime = new Date(session.loginTime);
+			const now = new Date();
+			const hoursDiff = ((now - loginTime) / (1000 * 60 * 60)).toFixed(1);
+			
+			return `
+				<div class="active-session-item">
+					<div class="user-info">${username}</div>
+					<div class="session-time">${hoursDiff} hours ago</div>
+					<div class="session-type">${session.type}</div>
+					<button class="force-logout-btn" onclick="adminPlugin.forceLogout('${username}')">
+						Force Logout
+					</button>
+				</div>
+			`;
+		}).join('');
+	}
+	
+	forceLogout(username) {
+		if (confirm(`Are you sure you want to force logout user "${username}"?`)) {
+			try {
+				// Remove from active sessions
+				const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
+				const sessions = JSON.parse(activeSessions);
+				delete sessions[username];
+				localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
+				
+				// Refresh display
+				this.loadActiveSessions();
+				
+				console.log(`User "${username}" force logged out successfully`);
+			} catch (error) {
+				console.error('Error force logging out user:', error);
+				alert('Error force logging out user. Please try again.');
+			}
+		}
+	}
+	
+	refreshAllData() {
+		// Refresh all data displays
+		this.loadUsers();
+		this.loadSearchHistory();
+		this.loadActiveSessions();
+		this.populateUserFilter();
+		
+		// Show feedback
+		const refreshBtn = document.getElementById('refreshAll');
+		if (refreshBtn) {
+			const originalText = refreshBtn.innerHTML;
+			refreshBtn.innerHTML = '<i class="fa-solid fa-check"></i> Refreshed!';
+			refreshBtn.style.background = '#4caf50';
+			
+			setTimeout(() => {
+				refreshBtn.innerHTML = originalText;
+				refreshBtn.style.background = 'linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%)';
+			}, 2000);
 		}
 	}
 }

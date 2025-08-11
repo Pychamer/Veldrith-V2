@@ -861,7 +861,7 @@ input:hover {
 }
 
 .user-generator input {
-	width: 100%;
+	width: calc(100% - 32px);
 	padding: 12px 16px;
 	border: 2px solid rgba(74, 124, 89, 0.3);
 	border-radius: 10px;
@@ -869,6 +869,7 @@ input:hover {
 	color: #fff;
 	font-size: 1em;
 	transition: all 0.3s ease;
+	box-sizing: border-box;
 }
 
 .user-generator input:focus {
@@ -1029,4 +1030,149 @@ input:hover {
 
 .hidden {
 	display: none !important;
+}
+
+.search-history-panel {
+	background: rgba(74, 124, 89, 0.1);
+	border: 2px solid #4a7c59;
+	border-radius: 12px;
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.search-history-panel h3 {
+	color: #4a7c59;
+	margin: 0 0 15px 0;
+	font-size: 1.2em;
+}
+
+.search-history-item {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(74, 124, 89, 0.3);
+	border-radius: 8px;
+	padding: 12px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.search-history-item .user-info {
+	color: #6b8e23;
+	font-weight: 600;
+}
+
+.search-history-item .search-query {
+	color: #fff;
+	font-size: 0.9em;
+}
+
+.search-history-item .timestamp {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.8em;
+}
+
+.search-history-filters {
+	display: flex;
+	gap: 10px;
+	margin-bottom: 15px;
+	flex-wrap: wrap;
+}
+
+.search-history-filters select,
+.search-history-filters input {
+	padding: 8px 12px;
+	border: 1px solid rgba(74, 124, 89, 0.3);
+	border-radius: 6px;
+	background: rgba(255, 255, 255, 0.1);
+	color: #fff;
+	font-size: 0.9em;
+}
+
+.search-history-filters select:focus,
+.search-history-filters input:focus {
+	outline: none;
+	border-color: #4a7c59;
+}
+
+.active-sessions-panel {
+	background: rgba(74, 124, 89, 0.1);
+	border: 2px solid #4a7c59;
+	border-radius: 12px;
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.active-sessions-panel h3 {
+	color: #4a7c59;
+	margin: 0 0 15px 0;
+	font-size: 1.2em;
+}
+
+.active-session-item {
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(74, 124, 89, 0.3);
+	border-radius: 8px;
+	padding: 12px;
+	margin-bottom: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.active-session-item .user-info {
+	color: #6b8e23;
+	font-weight: 600;
+}
+
+.active-session-item .session-time {
+	color: #fff;
+	font-size: 0.9em;
+}
+
+.active-session-item .session-type {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 0.8em;
+	padding: 4px 8px;
+	background: rgba(74, 124, 89, 0.3);
+	border-radius: 4px;
+}
+
+.force-logout-btn {
+	background: #d32f2f;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	border-radius: 6px;
+	font-size: 0.8em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.force-logout-btn:hover {
+	background: #f44336;
+	transform: translateY(-1px);
+}
+
+.refresh-btn {
+	background: linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%);
+	color: white;
+	border: none;
+	padding: 10px 16px;
+	border-radius: 8px;
+	font-size: 0.9em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.refresh-btn:hover {
+	background: linear-gradient(135deg, #5a8c69 0%, #7b9e33 100%);
+	transform: translateY(-1px);
+}
+
+.refresh-btn i {
+	font-size: 0.9em;
 }
