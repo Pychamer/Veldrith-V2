@@ -628,4 +628,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	setTimeout(() => {
 		checkCloakTab();
 	}, 500);
+
+	// Add version badge
+	const versionBadge = document.createElement('div');
+	versionBadge.className = 'version-badge';
+	versionBadge.textContent = 'V.1.5';
+	document.body.appendChild(versionBadge);
 });

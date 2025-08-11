@@ -1159,3 +1159,20 @@ input:hover {
 		background-position-x: -1000px;
 	}
 }
+
+.version-badge {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	background: linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%);
+	color: white;
+	padding: 8px 16px;
+	border-radius: 20px;
+	font-size: 14px;
+	font-weight: 600;
+	z-index: 1000;
+	box-shadow: 0 4px 15px rgba(74, 124, 89, 0.3);
+	border: 2px solid rgba(255, 255, 255, 0.2);
+	backdrop-filter: blur(10px);
+	font-family: 'DM Sans', sans-serif;
+}
