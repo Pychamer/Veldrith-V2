@@ -1163,7 +1163,7 @@ input:hover {
 .version-badge {
 	position: fixed;
 	top: 20px;
-	left: 20px;
+	left: 40px;
 	background: linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%);
 	color: white;
 	padding: 8px 16px;
