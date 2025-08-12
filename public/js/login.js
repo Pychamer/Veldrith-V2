@@ -120,9 +120,9 @@ class LoginSystem {
 		
 		// Redirect based on user type
 		if (type === 'admin') {
-			window.location.href = '/~';
+			window.location.href = '/&'; // Admin goes to proxy page
 		} else {
-			window.location.href = '/';
+			window.location.href = '/&'; // Regular users also go to proxy page
 		}
 	}
 	

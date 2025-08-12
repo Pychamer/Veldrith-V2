@@ -128,6 +128,11 @@
 					></a
 				>
 			</li>
+			<li>
+				<a href="#" onclick="logout()" style="color: #d32f2f;">
+					<span class="material-symbols-outlined">logout</span>
+				</a>
+			</li>
 
 		</ul>
 
@@ -472,9 +477,36 @@
 		<script src="/js/json-loader.js"></script>
 		<script src="/js/c.js"></script>
 		<script src="/js/search-tracker.js"></script>
+		<script src="/js/route-guard.js"></script>
 		<script src="/js/p.js"></script>
 		<script src="/js/&.js"></script>
 		<script src="/js/themes.js"></script>
+		<script>
+			function logout() {
+				if (confirm('Are you sure you want to logout?')) {
+					// Get current session to remove from active sessions
+					const session = localStorage.getItem('veldrith_session');
+					if (session) {
+						try {
+							const sessionData = JSON.parse(session);
+							const username = sessionData.username;
+							
+							// Remove from active sessions
+							const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
+							const sessions = JSON.parse(activeSessions);
+							delete sessions[username];
+							localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
+						} catch (error) {
+							console.error('Error parsing session during logout:', error);
+						}
+					}
+					
+					// Remove current session
+					localStorage.removeItem('veldrith_session');
+					window.location.href = '/login.html';
+				}
+			}
+		</script>
 		<script>
 			let CLF_config = {
 				app_id: '163a312a-7cde-41ab-a80c-cb4cf281efdf',

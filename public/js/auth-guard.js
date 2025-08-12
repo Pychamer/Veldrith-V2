@@ -144,9 +144,17 @@ class AuthGuard {
 			window.location.href = '/login.html';
 		}
 	}
+
+	// Global logout function for other pages
+	globalLogout() {
+		this.logout();
+	}
 }
 
 // Initialize auth guard when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-	new AuthGuard();
+	const authGuard = new AuthGuard();
+	
+	// Make logout function globally available
+	window.logout = () => authGuard.logout();
 });
