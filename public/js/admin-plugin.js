@@ -80,7 +80,7 @@ class AdminPlugin {
 		}
 	}
 	
-	generateUser() {
+	async generateUser() {
 		const username = document.getElementById('newUsername').value.trim();
 		const expirationDays = parseInt(document.getElementById('expirationDays').value) || 30;
 		
@@ -93,35 +93,37 @@ class AdminPlugin {
 			alert('Expiration days must be between 1 and 365');
 			return;
 		}
-		
-		// Generate 4-digit password
-		const password = this.generatePassword();
-		
-		// Calculate expiration date
-		const expirationDate = new Date();
-		expirationDate.setDate(expirationDate.getDate() + expirationDays);
-		
-		// Create user object
-		const user = {
-			username: username,
-			password: password,
-			expirationDate: expirationDate.toISOString(),
-			createdAt: new Date().toISOString(),
-			createdBy: 'Admin-Ranch'
-		};
-		
-		// Save user
-		this.saveUser(user);
-		
-		// Display generated credentials
-		this.displayCredentials(username, password, expirationDate);
-		
-		// Clear form
-		document.getElementById('newUsername').value = '';
-		document.getElementById('expirationDays').value = '';
-		
-		// Refresh users list
-		this.loadUsers();
+
+		try {
+			// Call server API to create user
+			const response = await fetch('/api/users/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ username, expirationDays })
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Display credentials
+				const expirationDate = new Date(result.user.expiresAt);
+				this.displayCredentials(username, result.user.password, expirationDate);
+				
+				// Clear form
+				document.getElementById('newUsername').value = '';
+				document.getElementById('expirationDays').value = '';
+				
+				// Refresh users list
+				this.loadUsers();
+			} else {
+				alert('Error creating user: ' + result.error);
+			}
+		} catch (error) {
+			console.error('Error creating user:', error);
+			alert('Error creating user. Please try again.');
+		}
 	}
 	
 	generatePassword() {
@@ -169,54 +171,32 @@ class AdminPlugin {
 		});
 	}
 	
-	async saveUser(user) {
-		try {
-			const users = await this.loadUsers();
-			
-			// Check if username already exists
-			const existingUserIndex = users.findIndex(u => u.username === user.username);
-			if (existingUserIndex !== -1) {
-				// Update existing user
-				users[existingUserIndex] = user;
-			} else {
-				// Add new user
-				users.push(user);
-			}
-			
-			localStorage.setItem('veldrith_users', JSON.stringify(users));
-			console.log('User saved successfully:', user);
-		} catch (error) {
-			console.error('Error saving user:', error);
-			alert('Error saving user. Please try again.');
-		}
-	}
+
 	
 	async loadUsers() {
 		try {
-			const usersData = localStorage.getItem('veldrith_users');
-			const users = usersData ? JSON.parse(usersData) : [];
+			const response = await fetch('/api/users');
+			const result = await response.json();
 			
-			// Filter out expired users
-			const validUsers = users.filter(user => this.isUserValid(user));
-			
-			// Update display
-			this.displayUsers(validUsers);
-			
-			return validUsers;
+			if (result.success) {
+				// Filter out expired users
+				const validUsers = result.users.filter(user => !user.isExpired);
+				
+				// Update display
+				this.displayUsers(validUsers);
+				
+				return validUsers;
+			} else {
+				console.error('Error loading users:', result.error);
+				return [];
+			}
 		} catch (error) {
 			console.error('Error loading users:', error);
 			return [];
 		}
 	}
 	
-	isUserValid(user) {
-		if (!user.expirationDate) return false;
-		
-		const now = new Date();
-		const expiration = new Date(user.expirationDate);
-		
-		return now <= expiration;
-	}
+
 	
 	displayUsers(users) {
 		const usersList = document.getElementById('usersList');
@@ -231,7 +211,7 @@ class AdminPlugin {
 			<div class="user-item">
 				<div class="user-info">
 					<div class="user-name">${user.username}</div>
-					<div class="user-expiry">Expires: ${new Date(user.expirationDate).toLocaleDateString()}</div>
+					<div class="user-expiry">Expires: ${new Date(user.expiresAt).toLocaleDateString()}</div>
 				</div>
 				<div class="user-actions">
 					<button class="delete-user" onclick="adminPlugin.deleteUser('${user.username}')">
@@ -250,22 +230,26 @@ class AdminPlugin {
 	
 	async removeUser(username) {
 		try {
-			const users = await this.loadUsers();
-			const filteredUsers = users.filter(user => user.username !== username);
+			const response = await fetch(`/api/users/${username}`, {
+				method: 'DELETE'
+			});
 			
-			localStorage.setItem('veldrith_users', JSON.stringify(filteredUsers));
+			const result = await response.json();
 			
-			// Refresh display
-			this.loadUsers();
-			
-			console.log(`User "${username}" deleted successfully`);
+			if (result.success) {
+				// Refresh display
+				this.loadUsers();
+				console.log(`User "${username}" deleted successfully`);
+			} else {
+				alert('Error deleting user: ' + result.error);
+			}
 		} catch (error) {
 			console.error('Error deleting user:', error);
 			alert('Error deleting user. Please try again.');
 		}
 	}
 	
-	populateUserFilter() {
+	async populateUserFilter() {
 		const userFilter = document.getElementById('userFilter');
 		if (!userFilter) return;
 		
@@ -273,7 +257,7 @@ class AdminPlugin {
 		userFilter.innerHTML = '<option value="">All Users</option>';
 		
 		// Get all users and add them to the filter
-		const users = this.loadUsersSync();
+		const users = await this.loadUsersSync();
 		users.forEach(user => {
 			const option = document.createElement('option');
 			option.value = user.username;
@@ -282,10 +266,17 @@ class AdminPlugin {
 		});
 	}
 	
-	loadUsersSync() {
+	async loadUsersSync() {
 		try {
-			const usersData = localStorage.getItem('veldrith_users');
-			return usersData ? JSON.parse(usersData) : [];
+			const response = await fetch('/api/users');
+			const result = await response.json();
+			
+			if (result.success) {
+				return result.users.filter(user => !user.isExpired);
+			} else {
+				console.error('Error loading users:', result.error);
+				return [];
+			}
 		} catch (error) {
 			console.error('Error loading users:', error);
 			return [];

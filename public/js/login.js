@@ -46,44 +46,29 @@ class LoginSystem {
 	
 	async checkUserCredentials(username, password) {
 		try {
-			// Load user accounts from storage
-			const users = await this.loadUsers();
-			
-			const user = users.find(u => 
-				u.username === username && 
-				u.password === password && 
-				this.isUserValid(u)
-			);
-			
-			if (user) {
+			// Call server API to validate credentials
+			const response = await fetch('/api/auth/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ username, password })
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
 				this.loginUser('user', username);
 			} else {
-				this.showError('Invalid username or password');
+				this.showError(result.error);
 			}
 		} catch (error) {
 			console.error('Error checking user credentials:', error);
-			this.showError('Authentication error. Please try again.');
+			this.showError('Error connecting to server. Please try again.');
 		}
 	}
 	
-	isUserValid(user) {
-		if (!user.expirationDate) return false;
-		
-		const now = new Date();
-		const expiration = new Date(user.expirationDate);
-		
-		return now <= expiration;
-	}
-	
-	async loadUsers() {
-		try {
-			const usersData = localStorage.getItem('veldrith_users');
-			return usersData ? JSON.parse(usersData) : [];
-		} catch (error) {
-			console.error('Error loading users:', error);
-			return [];
-		}
-	}
+
 	
 	loginUser(type, username) {
 		// Check if user is already logged in elsewhere
@@ -168,48 +153,7 @@ class LoginSystem {
 		}, 5000);
 	}
 	
-	async initializeDemoUser() {
-		try {
-			const users = await this.loadUsers();
-			
-			// Only create demo user if no users exist
-			if (users.length === 0) {
-				const demoUser = {
-					username: 'demo',
-					password: '1234',
-					expirationDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days
-					createdAt: new Date().toISOString(),
-					createdBy: 'system'
-				};
-				
-				await this.saveUser(demoUser);
-				console.log('Demo user created:', demoUser);
-			}
-		} catch (error) {
-			console.error('Error initializing demo user:', error);
-		}
-	}
-	
-	async saveUser(user) {
-		try {
-			const users = await this.loadUsers();
-			
-			// Check if username already exists
-			const existingUserIndex = users.findIndex(u => u.username === user.username);
-			if (existingUserIndex !== -1) {
-				// Update existing user
-				users[existingUserIndex] = user;
-			} else {
-				// Add new user
-				users.push(user);
-			}
-			
-			localStorage.setItem('veldrith_users', JSON.stringify(users));
-		} catch (error) {
-			console.error('Error saving user:', error);
-			throw error;
-		}
-	}
+
 }
 
 // Initialize login system when DOM is loaded
