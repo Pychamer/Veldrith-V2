@@ -283,13 +283,21 @@ class AdminPlugin {
 		}
 	}
 	
-	loadSearchHistory() {
+	async loadSearchHistory() {
 		try {
-			const searchHistory = localStorage.getItem('veldrith_search_history') || '[]';
-			const history = JSON.parse(searchHistory);
-			this.displaySearchHistory(history);
+			const response = await fetch('/api/searches');
+			const result = await response.json();
+			if (response.ok && result.success) {
+				this.displaySearchHistory(result.searches || []);
+			} else {
+				// Fallback to local if server not available
+				const local = localStorage.getItem('veldrith_search_history') || '[]';
+				this.displaySearchHistory(JSON.parse(local));
+			}
 		} catch (error) {
 			console.error('Error loading search history:', error);
+			const local = localStorage.getItem('veldrith_search_history') || '[]';
+			this.displaySearchHistory(JSON.parse(local));
 		}
 	}
 	
@@ -342,13 +350,20 @@ class AdminPlugin {
 		}
 	}
 	
-	loadActiveSessions() {
+	async loadActiveSessions() {
 		try {
-			const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
-			const sessions = JSON.parse(activeSessions);
-			this.displayActiveSessions(sessions);
+			const response = await fetch('/api/sessions');
+			const result = await response.json();
+			if (response.ok && result.success) {
+				const sessions = {};
+				(result.sessions || []).forEach(s => { sessions[s.username] = s; });
+				this.displayActiveSessions(sessions);
+			} else {
+				this.displayActiveSessions({});
+			}
 		} catch (error) {
 			console.error('Error loading active sessions:', error);
+			this.displayActiveSessions({});
 		}
 	}
 	
@@ -384,14 +399,8 @@ class AdminPlugin {
 	forceLogout(username) {
 		if (confirm(`Are you sure you want to force logout user "${username}"?`)) {
 			try {
-				// Remove from active sessions
-				const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
-				const sessions = JSON.parse(activeSessions);
-				delete sessions[username];
-				localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
-				
-				// Refresh display
-				this.loadActiveSessions();
+				fetch(`/api/sessions/${encodeURIComponent(username)}`, { method: 'DELETE' })
+					.finally(() => this.loadActiveSessions());
 				
 				console.log(`User "${username}" force logged out successfully`);
 			} catch (error) {

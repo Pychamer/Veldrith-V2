@@ -41,8 +41,8 @@ class RouteGuard {
 				return;
 			}
 
-			// Session is valid, allow access
-			this.showUserInfo(sessionData);
+			// Verify with server that session is active
+			this.verifyAndHeartbeat(sessionData);
 			
 		} catch (error) {
 			console.error('Error parsing session:', error);
@@ -50,6 +50,40 @@ class RouteGuard {
 			localStorage.removeItem('veldrith_session');
 			this.redirectToLogin();
 		}
+	}
+
+	async verifyAndHeartbeat(sessionData) {
+		try {
+			const resp = await fetch('/api/auth/heartbeat', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ username: sessionData.username, token: sessionData.token })
+			});
+			const result = await resp.json();
+			if (!resp.ok || !result.success) {
+				// Session invalid or taken elsewhere
+				localStorage.removeItem('veldrith_session');
+				this.redirectToLogin();
+				return;
+			}
+			this.showUserInfo(sessionData);
+			this.startHeartbeat(sessionData);
+		} catch (e) {
+			console.error('Heartbeat failed:', e);
+		}
+	}
+
+	startHeartbeat(sessionData) {
+		if (this._hb) clearInterval(this._hb);
+		this._hb = setInterval(async () => {
+			try {
+				await fetch('/api/auth/heartbeat', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ username: sessionData.username, token: sessionData.token })
+				});
+			} catch {}
+		}, 60000);
 	}
 
 	redirectToLogin() {
@@ -65,14 +99,15 @@ class RouteGuard {
 		}
 		
 		// Add user info to the page header if it exists
-		const header = document.querySelector('.header');
-		if (header && !document.querySelector('.user-welcome')) {
-			const userWelcome = document.createElement('div');
-			userWelcome.className = 'user-welcome';
-			userWelcome.style.cssText = 'position: absolute; top: 20px; right: 20px; background: rgba(74, 124, 89, 0.9); color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; backdrop-filter: blur(10px);';
-			userWelcome.textContent = `Welcome, ${sessionData.username}`;
-			header.appendChild(userWelcome);
+		// Welcome badge placement fix: attach to body top-right unobtrusively
+		let badge = document.querySelector('.user-welcome');
+		if (!badge) {
+			badge = document.createElement('div');
+			badge.className = 'user-welcome';
+			document.body.appendChild(badge);
 		}
+		badge.textContent = `Welcome, ${sessionData.username}`;
+		badge.style.cssText = 'position: fixed; top: 12px; right: 16px; background: rgba(74,124,89,0.9); color: #fff; padding: 6px 12px; border-radius: 14px; font-size: 12px; z-index: 2147483647; backdrop-filter: blur(8px);';
 	}
 }
 
@@ -88,4 +123,23 @@ if (document.readyState === 'loading') {
 	});
 } else {
 	new RouteGuard();
+}
+
+// Provide a global logout fallback if auth-guard is not loaded
+if (typeof window !== 'undefined' && typeof window.logout !== 'function') {
+	window.logout = async function () {
+		try {
+			const session = localStorage.getItem('veldrith_session');
+			if (session) {
+				const { username, token } = JSON.parse(session);
+				await fetch('/api/auth/logout', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ username, token })
+				});
+			}
+		} catch (e) {}
+		localStorage.removeItem('veldrith_session');
+		window.location.href = '/login.html';
+	};
 }

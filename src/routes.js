@@ -119,13 +119,108 @@ router.post('/api/auth/login', (req, res) => {
 
 		const result = userManager.validateUser(username, password);
 		
-		if (result.valid) {
-			res.json({ success: true, user: result.user });
-		} else {
-			res.status(401).json({ success: false, error: result.error });
+		if (!result.valid) {
+			return res.status(401).json({ success: false, error: result.error });
 		}
+
+		// Enforce single active session per username
+		if (userManager.isSessionActive(username)) {
+			return res.status(423).json({ success: false, error: 'Session currently in use' });
+		}
+
+		const session = userManager.createSession(username);
+		return res.json({ success: true, user: result.user, session });
 	} catch (error) {
 		console.error('Error authenticating user:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Session heartbeat to keep session active and verify token
+router.post('/api/auth/heartbeat', (req, res) => {
+	try {
+		const { username, token } = req.body;
+		if (!username || !token) {
+			return res.status(400).json({ success: false, error: 'Missing username or token' });
+		}
+		const result = userManager.heartbeat(username, token);
+		if (!result.success) {
+			return res.status(401).json(result);
+		}
+		return res.json({ success: true });
+	} catch (error) {
+		console.error('Error in heartbeat:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Logout endpoint to clear active session
+router.post('/api/auth/logout', (req, res) => {
+	try {
+		const { username, token } = req.body;
+		if (!username || !token) {
+			return res.status(400).json({ success: false, error: 'Missing username or token' });
+		}
+		if (!userManager.isValidSession(username, token)) {
+			return res.status(401).json({ success: false, error: 'Invalid session' });
+		}
+		userManager.clearSession(username);
+		return res.json({ success: true });
+	} catch (error) {
+		console.error('Error in logout:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Admin: get active sessions
+router.get('/api/sessions', (req, res) => {
+	try {
+		const sessions = userManager.getActiveSessions();
+		return res.json({ success: true, sessions });
+	} catch (error) {
+		console.error('Error getting sessions:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Admin: force clear a user's session by username
+router.delete('/api/sessions/:username', (req, res) => {
+	try {
+		const { username } = req.params;
+		const result = userManager.clearSession(username);
+		if (result.success) return res.json({ success: true });
+		return res.status(404).json(result);
+	} catch (error) {
+		console.error('Error clearing session:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Record a search query globally (server-side)
+router.post('/api/searches', (req, res) => {
+	try {
+		const { username, token, query, timestamp } = req.body;
+		if (!username || !token || !query) {
+			return res.status(400).json({ success: false, error: 'Missing fields' });
+		}
+		if (!userManager.isValidSession(username, token)) {
+			return res.status(401).json({ success: false, error: 'Invalid session' });
+		}
+		userManager.addSearch(username, query, timestamp);
+		return res.json({ success: true });
+	} catch (error) {
+		console.error('Error recording search:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Get global searches (admin view)
+router.get('/api/searches', (req, res) => {
+	try {
+		const searches = userManager.getSearches();
+		return res.json({ success: true, searches });
+	} catch (error) {
+		console.error('Error getting searches:', error);
 		res.status(500).json({ success: false, error: 'Internal server error' });
 	}
 });

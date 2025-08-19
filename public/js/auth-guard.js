@@ -122,26 +122,27 @@ class AuthGuard {
 	
 	logout() {
 		if (confirm('Are you sure you want to logout?')) {
-			// Get current session to remove from active sessions
+			// Get current session
 			const session = localStorage.getItem('veldrith_session');
 			if (session) {
 				try {
 					const sessionData = JSON.parse(session);
-					const username = sessionData.username;
-					
-					// Remove from active sessions
-					const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
-					const sessions = JSON.parse(activeSessions);
-					delete sessions[username];
-					localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
+					fetch('/api/auth/logout', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ username: sessionData.username, token: sessionData.token })
+					}).finally(() => {
+						localStorage.removeItem('veldrith_session');
+						window.location.href = '/login.html';
+					});
 				} catch (error) {
-					console.error('Error parsing session during logout:', error);
+					console.error('Error during logout:', error);
+					localStorage.removeItem('veldrith_session');
+					window.location.href = '/login.html';
 				}
+			} else {
+				window.location.href = '/login.html';
 			}
-			
-			// Remove current session
-			localStorage.removeItem('veldrith_session');
-			window.location.href = '/login.html';
 		}
 	}
 
