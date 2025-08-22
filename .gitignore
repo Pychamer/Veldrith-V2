@@ -3,7 +3,7 @@
 *.sass.map
 *.scss.map
 node_modules/
-
+cloudflared.deb
 temp_image
 
 # Byte-compiled / optimized / DLL files

@@ -1,0 +1,44 @@
+[
+  {
+    "username": "Admin-Ranch",
+    "password": "yBdqe2ah",
+    "type": "admin",
+    "createdAt": "2025-08-12T19:01:34.388Z",
+    "expiresAt": null
+  },
+  {
+    "username": "Tony",
+    "password": "9646",
+    "type": "user",
+    "createdAt": "2025-08-18T18:38:39.931Z",
+    "expiresAt": "2025-10-17T18:38:39.931Z"
+  },
+  {
+    "username": "Carlos",
+    "password": "4593",
+    "type": "user",
+    "createdAt": "2025-08-19T18:39:33.864Z",
+    "expiresAt": "2025-09-18T18:39:33.864Z"
+  },
+  {
+    "username": "Jaden",
+    "password": "9512",
+    "type": "user",
+    "createdAt": "2025-08-20T19:54:10.279Z",
+    "expiresAt": "2025-10-19T19:54:10.279Z"
+  },
+  {
+    "username": "Anthony",
+    "password": "8525",
+    "type": "user",
+    "createdAt": "2025-08-20T20:30:47.395Z",
+    "expiresAt": "2025-10-19T20:30:47.395Z"
+  },
+  {
+    "username": "Colin",
+    "password": "8605",
+    "type": "user",
+    "createdAt": "2025-08-21T18:48:26.561Z",
+    "expiresAt": "2025-10-20T18:48:26.561Z"
+  }
+]
