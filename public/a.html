@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="/css/index.css" />
+		<link rel="stylesheet" href="/css/themes.css" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+		<title>Veldrith</title>
+		<link rel="icon" type="icon/x-icon" href="/assets/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta
+			name="description"
+			content="Launch into Veldrith, the next gen proxy."
+		/>
+		<meta
+			name="keywords"
+			content="Proxy, Unblocker, Veldrith Unblocker, Veldrith"
+		/>
+		<meta property="og:image" content="/assets/logo.webp" />
+		<!-- Google Analytics DO NOT REMOVE -->
+		<meta name="google-adsense-account" content="ca-pub-3747175608041884" />
+		<script
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=G-3DTW1KTNCF"
+		></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+
+			gtag('config', 'G-3DTW1KTNCF');
+		</script>
+
+		<link
+			rel="preload"
+			as="style"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+		/>
+		<link
+			rel="preload"
+			as="style"
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+		/>
+		<link rel="stylesheet" href="/css/index.css" />
+		<link rel="stylesheet" href="/css/ag.css" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+	</head>
+
+	<body>
+		<div class="failtoast">
+			<div class="failtoast-content">
+				<i class="fa fa-solid fa-circle-exclamation fail"></i>
+				<div class="failmessage">
+					<span class="failtext text-1" id="text-1">Failed</span>
+					<span class="failtext text-2" id="text-2"
+						>Something went wrong. Please try again.</span
+					>
+				</div>
+			</div>
+			<i class="fa-solid fa-xmark failclose"></i>
+			<div class="failprogress"></div>
+		</div>
+		<ul class="navbar">
+			<li style="margin-left: -1px; margin-top: 2px">
+				<a href="/"
+					><img class="logo" src="/assets/logo.webp" alt="Logo"
+				/></a>
+			</li>
+			<hr style="margin-top: 5px" />
+			<li>
+				<a href="/"
+					><span
+						style="margin-top: 0px"
+						class="material-symbols-outlined"
+						>cottage</span
+					></a
+				>
+			</li>
+			<li>
+				<a href="/g"
+					><span class="material-symbols-outlined">joystick</span></a
+				>
+			</li>
+			<li>
+				<a href="/a"
+					><span id="navactive" class="material-symbols-outlined"
+						>apps</span
+					></a
+				>
+			</li>
+			<li>
+				<a href="/&"
+					><span class="material-symbols-outlined">public</span></a
+				>
+			</li>
+
+			<hr />
+			<li>
+				<a href="/~"
+					><span
+						style="margin-top: 0"
+						class="material-symbols-outlined"
+						>tune</span
+					></a
+				>
+			</li>
+			<li>
+				<a href="#" onclick="logout()" style="color: #d32f2f;">
+					<span class="material-symbols-outlined">logout</span>
+				</a>
+			</li>
+
+		</ul>
+
+		<div class="scrolltop">
+			<span class="material-symbols-outlined">arrow_upward</span>
+		</div>
+
+		<div
+			class="header"
+			style="
+				display: inline-flex;
+				width: 1100px;
+				transform: translate(-50%, -50%);
+				top: 4em;
+				position: fixed;
+				margin-left: 1vw;
+			"
+		>
+			<div style="animation: fade-in-top 1s" class="search-header">
+				<input
+					style="
+						width: 400px;
+						margin-left: -22px;
+						padding-right: 38px;
+						padding-left: 38px;
+						text-overflow: ellipsis;
+					"
+					placeholder="Search Veldrith for Apps..."
+					class="search-header__input appsSearchInput"
+					type="text"
+				/>
+				<button
+					class="search-header__button"
+					aria-label="Search Button"
+					style="transform: translate(-6px, 1px)"
+				>
+					<svg
+						fill="none"
+						viewBox="0 0 18 18"
+						height="18"
+						width="18"
+						class="search-header__icon"
+					>
+						<path
+							fill="#3A3A3A"
+							d="M7.132 0C3.197 0 0 3.124 0 6.97c0 3.844 3.197 6.969 7.132 6.969 1.557 0 2.995-.49 4.169-1.32L16.82 18 18 16.847l-5.454-5.342a6.846 6.846 0 0 0 1.718-4.536C14.264 3.124 11.067 0 7.132 0zm0 .82c3.48 0 6.293 2.748 6.293 6.15 0 3.4-2.813 6.149-6.293 6.149S.839 10.37.839 6.969C.839 3.568 3.651.82 7.132.82z"
+						></path>
+					</svg>
+				</button>
+			</div>
+		</div>
+		<div
+			class="appsContainer"
+			style="top: 8em; left: 50%; translate: -50%"
+		></div>
+		<div style="z-index: -998">
+			<div style="z-index: -998; position: fixed" class="blob"></div>
+			<div style="z-index: -998; position: fixed" class="blobbig"></div>
+			<div style="z-index: -998; position: fixed" class="blobsmall"></div>
+			<div style="z-index: -998; position: fixed" class="blobtop"></div>
+			<div class="forest">
+				<div class="layer back"></div>
+				<div class="layer mid"></div>
+				<div class="layer front"></div>
+			</div>
+			<div style="z-index: -999; position: fixed" id="particles-js"></div>
+		</div>
+		<script>
+			particlesJS('particles-js', {
+				particles: {
+					number: {
+						value: 30,
+						density: {
+							enable: true,
+							value_area: 800
+						}
+					},
+					color: {
+						value: ['#4a7c59', '#6b8e23', '#8fbc8f', '#90ee90', '#98fb98']
+					},
+					shape: {
+						type: 'image',
+						stroke: {
+							width: 0,
+							color: '#000000'
+						},
+						polygon: {
+							nb_sides: 5
+						},
+						image: {
+							src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8IS0tIFBpeGVsYXRlZCBsZWFmIHNoYXBlIC0tPgogIDxyZWN0IHg9IjYiIHk9IjIiIHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiM0YTdjNTkiLz4KICA8cmVjdCB4PSI1IiB5PSIzIiB3aWR0aD0iNiIgaGVpZ2h0PSIxIiBmaWxsPSIjNGE3YzU5Ii8+CiAgPHJlY3QgeD0iNCIgeT0iNCIgd2lkdGg9IjgiIGhlaWdodD0iMSIgZmlsbD0iIzRhN2M1OSIvPgogIDxyZWN0IHg9IjMiIHk9IjUiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxIiBmaWxsPSIjNGE3YzU5Ii8+CiAgPHJlY3QgeD0iMiIgeT0iNiIgd2lkdGg9IjEyIiBoZWlnaHQ9IjEiIGZpbGw9IiM0YTdjNTkiLz4KICA8cmVjdCB4PSIyIiB5PSI3IiB3aWR0aD0iMTIiIGhlaWdodD0iMSIgZmlsbD0iIzRhN2M1OSIvPgogIDxyZWN0IHg9IjMiIHk9IjgiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxIiBmaWxsPSIjNGE3YzU5Ii8+CiAgPHJlY3QgeD0iNCIgeT0iOSIgd2lkdGg9IjgiIGhlaWdodD0iMSIgZmlsbD0iIzRhN2M1OSIvPgogIDxyZWN0IHg9IjUiIHk9IjEwIiB3aWR0aD0iNiIgaGVpZ2h0PSIxIiBmaWxsPSIjNGE3YzU5Ii8+CiAgPHJlY3QgeD0iNiIgeT0iMTEiIHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiM0YTdjNTkiLz4KICA8cmVjdCB4PSI3IiB5PSIxMiIgd2lkdGg9IjIiIGhlaWdodD0iMSIgZmlsbD0iIzRhN2M1OSIvPgogIAogIDwhLS0gTGVhZiBzdGVtIC0tPgogIDxyZWN0IHg9IjciIHk9IjEzIiB3aWR0aD0iMiIgaGVpZ2h0PSIyIiBmaWxsPSIjMmQ0YTJkIi8+CiAgPHJlY3QgeD0iNyIgeT0iMTUiIHdpZHRoPSIyIiBoZWlnaHQ9IjEiIGZpbGw9IiMyZDRhMmQiLz4KPC9zdmc+',
+							width: 20,
+							height: 20
+						}
+					},
+					opacity: {
+						value: 0.8,
+						random: true,
+						anim: {
+							enable: true,
+							speed: 1,
+							opacity_min: 0.3,
+							sync: false
+						}
+					},
+					size: {
+						value: 15,
+						random: true,
+						anim: {
+							enable: true,
+							speed: 2,
+							size_min: 8,
+							sync: false
+						}
+					},
+					line_linked: {
+						enable: false,
+						distance: 150,
+						color: '#4a7c59',
+						opacity: 0.4,
+						width: 1
+					},
+					move: {
+						enable: true,
+						speed: 1,
+						direction: 'top',
+						random: true,
+						straight: false,
+						out_mode: 'out',
+						bounce: false,
+						attract: {
+							enable: false,
+							rotateX: 318.0130544358847,
+							rotateY: 556.5228452627983
+						}
+					}
+				},
+				interactivity: {
+					detect_on: 'window',
+					events: {
+						onhover: {
+							enable: false,
+							mode: 'repulse'
+						},
+						onclick: {
+							enable: true,
+							mode: 'push'
+						},
+						resize: true
+					},
+					modes: {
+						grab: {
+							distance: 400,
+							line_linked: {
+								opacity: 1
+							}
+						},
+						bubble: {
+							distance: 400,
+							size: 40,
+							duration: 2,
+							opacity: 8,
+							speed: 3
+						},
+						repulse: {
+							distance: 200,
+							duration: 0.4
+						},
+						push: {
+							particles_nb: 1
+						},
+						remove: {
+							particles_nb: 10
+						}
+					}
+				},
+				retina_detect: true
+			});
+		</script>
+		<script src="/js/localforage.min.js"></script>
+		<script src="/js/json-loader.js"></script>
+		<script src="/js/c.js"></script>
+		<script src="/js/search-tracker.js"></script>
+		<script src="/js/route-guard.js"></script>
+		<script src="/js/themes.js"></script>
+		<script>
+			function logout() {
+				if (confirm('Are you sure you want to logout?')) {
+					// Get current session to remove from active sessions
+					const session = localStorage.getItem('veldrith_session');
+					if (session) {
+						try {
+							const sessionData = JSON.parse(session);
+							const username = sessionData.username;
+							
+							// Remove from active sessions
+							const activeSessions = localStorage.getItem('veldrith_active_sessions') || '{}';
+							const sessions = JSON.parse(activeSessions);
+							delete sessions[username];
+							localStorage.setItem('veldrith_active_sessions', JSON.stringify(sessions));
+						} catch (error) {
+							console.error('Error parsing session during logout:', error);
+						}
+					}
+					
+					// Remove current session
+					localStorage.removeItem('veldrith_session');
+					window.location.href = '/login.html';
+				}
+			}
+		</script>
+		<script type="text/javascript">
+			document.addEventListener('DOMContentLoaded', function () {
+				let hideAds = localStorage.getItem('hideAds');
+
+				if (hideAds === null || hideAds === 'false') {
+					let script = document.createElement('script');
+					script.type = 'text/javascript';
+					script.src =
+						'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3747175608041884';
+					document.body.appendChild(script);
+				}
+			});
+		</script>
+		<script>
+			let CLF_config = {
+				app_id: '163a312a-7cde-41ab-a80c-cb4cf281efdf',
+				data: {
+					user_id: '123456', // required
+					user_email: 'user@email.com', // required
+					user_name: 'User Name', // optional
+					custom_data: {
+						JobRole: 'CEO', // optional
+						Plan: 'Pro', // optional
+						teamMates: '4', // optional
+						MonthlySpend: '50 USD' // optional
+					}
+				}
+			};
+		</script>
+	
+	</body>
+</html>

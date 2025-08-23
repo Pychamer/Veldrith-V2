@@ -1,0 +1,30 @@
+{
+  "Jaden": {
+    "username": "Jaden",
+    "token": "tok_qrfxskwd93mene5rez",
+    "loginTime": "2025-08-22T22:17:48.299Z",
+    "lastSeen": "2025-08-22T22:22:45.974Z",
+    "type": "user"
+  },
+  "Colin": {
+    "username": "Colin",
+    "token": "tok_xfgiu2bnqrpmeniq2vz",
+    "loginTime": "2025-08-23T00:25:34.751Z",
+    "lastSeen": "2025-08-23T00:58:25.615Z",
+    "type": "user"
+  },
+  "Admin-Ranch": {
+    "username": "Admin-Ranch",
+    "token": "tok_b85iyqx6mirmeon5vn1",
+    "loginTime": "2025-08-23T19:17:36.493Z",
+    "lastSeen": "2025-08-23T19:17:44.840Z",
+    "type": "admin"
+  },
+  "Ezequil": {
+    "username": "Ezequil",
+    "token": "tok_1ywihiqqwynmeob3f44",
+    "loginTime": "2025-08-23T13:39:46.372Z",
+    "lastSeen": "2025-08-23T14:11:48.488Z",
+    "type": "user"
+  }
+}

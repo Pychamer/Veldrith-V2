@@ -1,0 +1,395 @@
+/* Login Page Styles */
+.login-container {
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	overflow: hidden;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Forest parallax background (same as main page) */
+.wood-bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: 
+		/* Base forest color */
+		linear-gradient(to bottom, #0e2d12 0%, #12421a 50%, #1b5e20 100%);
+	opacity: 0.9;
+}
+
+.wood-bg::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 40%;
+	background-repeat: repeat-x;
+	background-size: 600px auto;
+	animation: forestPan 80s linear infinite;
+	opacity: 0.9;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='200' viewBox='0 0 600 200'><rect width='600' height='200' fill='transparent'/><g fill='%230e2d12'><polygon points='40,180 70,120 100,180'/><rect x='67' y='180' width='6' height='20' fill='%23081f0c'/><polygon points='160,182 190,125 220,182'/><rect x='187' y='182' width='6' height='18' fill='%23081f0c'/><polygon points='280,178 310,120 340,178'/><rect x='307' y='178' width='6' height='22' fill='%23081f0c'/><polygon points='420,184 450,128 480,184'/><rect x='447' y='184' width='6' height='16' fill='%23081f0c'/><polygon points='520,180 545,130 570,180'/><rect x='543' y='180' width='6' height='20' fill='%23081f0c'/></g></svg>");
+}
+
+.wood-bg::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 60%;
+	background-repeat: repeat-x;
+	background-size: 600px auto;
+	animation: forestPan 50s linear infinite;
+	opacity: 0.9;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='240' viewBox='0 0 600 240'><rect width='600' height='240' fill='transparent'/><g fill='%231b5e20'><polygon points='30,250 70,160 110,250'/><rect x='67' y='250' width='10' height='40' fill='%230f3d16'/><polygon points='160,255 200,165 240,255'/><rect x='197' y='255' width='10' height='35' fill='%230f3d16'/><polygon points='290,248 330,158 370,248'/><rect x='327' y='248' width='10' height='42' fill='%230f3d16'/><polygon points='420,258 460,168 500,258'/><rect x='457' y='258' width='10' height='32' fill='%230f3d16'/><polygon points='520,252 560,162 600,252'/><rect x='557' y='252' width='10' height='38' fill='%230f3d16'/></g><rect y='270' width='600' height='10' fill='%231a3019'/></svg>");
+}
+
+@keyframes forestPan {
+	0% {
+		background-position-x: 0;
+	}
+	100% {
+		background-position-x: -1000px;
+	}
+}
+
+/* Floating leaves */
+.floating-leaves {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
+}
+
+.leaf {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	background: 
+		/* Pixelated leaf pattern */
+		linear-gradient(45deg, transparent 40%, #4a7c59 40%, #4a7c59 60%, transparent 60%),
+		linear-gradient(-45deg, transparent 40%, #6b8e23 40%, #6b8e23 60%, transparent 60%),
+		/* Leaf center */
+		radial-gradient(circle at 50% 50%, #8fbc8f 0%, #4a7c59 70%, transparent 70%);
+	background-size: 20px 20px, 20px 20px, 20px 20px;
+	background-position: 0 0, 0 0, 0 0;
+	opacity: 0.8;
+	animation: float 6s ease-in-out infinite;
+	border-radius: 2px;
+}
+
+.leaf-1 {
+	top: 10%;
+	left: 10%;
+	animation-delay: 0s;
+	transform: rotate(15deg);
+}
+
+.leaf-2 {
+	top: 20%;
+	right: 15%;
+	animation-delay: 1s;
+	transform: rotate(-20deg);
+}
+
+.leaf-3 {
+	top: 60%;
+	left: 5%;
+	animation-delay: 2s;
+	transform: rotate(45deg);
+}
+
+.leaf-4 {
+	top: 70%;
+	right: 10%;
+	animation-delay: 3s;
+	transform: rotate(-30deg);
+}
+
+.leaf-5 {
+	top: 40%;
+	left: 20%;
+	animation-delay: 4s;
+	transform: rotate(60deg);
+}
+
+.leaf-6 {
+	top: 80%;
+	right: 25%;
+	animation-delay: 5s;
+	transform: rotate(-15deg);
+}
+
+@keyframes float {
+	0%, 100% {
+		transform: translateY(0px) rotate(0deg);
+		opacity: 0.7;
+	}
+	50% {
+		transform: translateY(-20px) rotate(180deg);
+		opacity: 1;
+	}
+}
+
+/* Login form container */
+.login-form-container {
+	background: 
+		/* Wood grain texture */
+		linear-gradient(90deg, rgba(139, 69, 19, 0.1) 0%, transparent 20%, rgba(160, 82, 45, 0.1) 40%, transparent 60%, rgba(139, 69, 19, 0.1) 80%),
+		/* Base semi-transparent white */
+		rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+	border-radius: 20px;
+	padding: 40px;
+	box-shadow: 
+		0 20px 40px rgba(0, 0, 0, 0.3),
+		0 0 0 1px rgba(139, 69, 19, 0.3),
+		inset 0 0 20px rgba(139, 69, 19, 0.1);
+	max-width: 400px;
+	width: 90%;
+	position: relative;
+	z-index: 2;
+	border: 3px solid rgba(139, 69, 19, 0.5);
+}
+
+.login-header {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.logo-icon {
+	width: 60px;
+	height: 60px;
+	color: #4a7c59;
+	margin-bottom: 20px;
+}
+
+.login-header h1 {
+	color: #2d4a2d;
+	font-size: 2.2em;
+	margin: 0 0 10px 0;
+	font-weight: 600;
+	position: relative;
+	display: inline-block;
+	padding: 15px 25px;
+	background: 
+		/* Log texture */
+		linear-gradient(45deg, #8B4513 25%, transparent 25%),
+		linear-gradient(-45deg, #8B4513 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, #8B4513 75%),
+		linear-gradient(-45deg, transparent 75%, #8B4513 75%);
+	background-size: 8px 8px;
+	background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+	background-color: #A0522D;
+	border-radius: 15px;
+	border: 3px solid #654321;
+	box-shadow: 
+		inset 0 0 20px rgba(0, 0, 0, 0.3),
+		0 8px 25px rgba(0, 0, 0, 0.4);
+	transform: rotate(-1deg);
+}
+
+.login-header h1::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 20px;
+	height: 20px;
+	background: #4a7c59;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+	animation: leafSway 3s ease-in-out infinite;
+}
+
+.login-header h1::after {
+	content: '';
+	position: absolute;
+	top: -5px;
+	right: -15px;
+	width: 15px;
+	height: 15px;
+	background: #6b8e23;
+	clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+	animation: leafSway 2.5s ease-in-out infinite reverse;
+}
+
+@keyframes leafSway {
+	0%, 100% { transform: rotate(-5deg); }
+	50% { transform: rotate(5deg); }
+}
+
+.login-header p {
+	color: #666;
+	font-size: 1.1em;
+	margin: 0;
+}
+
+/* Form styles */
+.login-form {
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+}
+
+.input-group {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.input-group label {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: #2d4a2d;
+	font-weight: 600;
+	font-size: 1em;
+}
+
+.input-group label i {
+	color: #4a7c59;
+	font-size: 1.1em;
+}
+
+.input-group input {
+	padding: 15px 20px;
+	border: 2px solid #e0e0e0;
+	border-radius: 12px;
+	font-size: 1em;
+	transition: all 0.3s ease;
+	background: rgba(255, 255, 255, 0.9);
+}
+
+.input-group input:focus {
+	outline: none;
+	border-color: #4a7c59;
+	box-shadow: 0 0 0 3px rgba(74, 124, 89, 0.1);
+	background: white;
+}
+
+.input-group.focused label {
+	color: #4a7c59;
+}
+
+.input-group.focused label i {
+	color: #6b8e23;
+}
+
+.input-group input::placeholder {
+	color: #999;
+}
+
+/* Login button */
+.login-btn {
+	background: linear-gradient(135deg, #4a7c59 0%, #6b8e23 100%);
+	color: white;
+	border: none;
+	padding: 16px 32px;
+	border-radius: 12px;
+	font-size: 1.1em;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	box-shadow: 0 4px 15px rgba(74, 124, 89, 0.3);
+}
+
+.login-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 8px 25px rgba(74, 124, 89, 0.4);
+	background: linear-gradient(135deg, #5a8c69 0%, #7b9e33 100%);
+}
+
+.login-btn:active {
+	transform: translateY(0);
+}
+
+.login-btn i {
+	font-size: 1.1em;
+}
+
+/* Footer */
+.login-footer {
+	text-align: center;
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.back-link {
+	color: #4a7c59;
+	text-decoration: none;
+	font-weight: 500;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	transition: color 0.3s ease;
+}
+
+.back-link:hover {
+	color: #2d4a2d;
+}
+
+.back-link i {
+	font-size: 0.9em;
+}
+
+/* Error message */
+.error-message {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	background: #ff6b6b;
+	color: white;
+	padding: 15px 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+	z-index: 1000;
+	max-width: 300px;
+	animation: slideIn 0.3s ease;
+}
+
+.error-message.hidden {
+	display: none;
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+	.login-form-container {
+		padding: 30px 20px;
+		margin: 20px;
+	}
+	
+	.login-header h1 {
+		font-size: 1.8em;
+	}
+	
+	.leaf {
+		width: 15px;
+		height: 15px;
+	}
+}
