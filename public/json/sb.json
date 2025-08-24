@@ -1,14 +1,14 @@
 [
 	{
-		"name": "Google",
-		"url": "https://google.com",
-		"img": "/assets/imgs/sb/Google.webp",
+		"name": "Roblox",
+		"url": "https://www.easyfun.gg/cloud-games/roblox.html",
+		"img": "/assets/imgs/sb/Roblox.webp",
 		"bg": "#fff"
 	},
 	{
-		"name": "YouTube",
-		"url": "https://google.com/",
-		"img": "/assets/imgs/sb/YouTube.webp"
+		"name": "Clash Royale",
+		"url": "https://www.easyfun.gg/cloud-games/clash-royale-cloud-online.html",
+		"img": "/assets/imgs/sb/Clash_Royale.webp"
 	},
 	{
 		"name": "Spotify",

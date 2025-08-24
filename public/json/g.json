@@ -1218,10 +1218,16 @@
 		"categories": ["all"]
 	},
 	{
-		"name": "Google Snake Modded",
-		"url": "https://googlesnakemods.com/v/current/",
-		"img": "/assets/imgs/g/Google_Snake_Modded.webp",
-		"categories": ["all"]
+		"name": "Roblox",
+		"url": "https://www.easyfun.gg/cloud-games/roblox.html",
+		"img": "/assets/imgs/g/roblox.webp",
+		"categories": ["all", "popular"]
+	},
+	{
+		"name": "Clash Royale",
+		"url": "https://www.easyfun.gg/cloud-games/clash-royale-cloud-online.html",
+		"img": "/assets/imgs/g/clash_royale.webp",
+		"categories": ["all", "popular"]
 	},
 	{
 		"name": "Helix Jump",
