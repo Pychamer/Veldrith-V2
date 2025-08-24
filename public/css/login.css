@@ -234,6 +234,26 @@
 	margin: 0;
 }
 
+/* Notes section */
+.login-notes {
+	margin: 20px 0 10px 0;
+	padding: 12px 16px;
+	background: rgba(255, 255, 255, 0.8);
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+}
+
+.login-notes ul {
+	margin: 0;
+	padding-left: 18px;
+}
+
+.login-notes li {
+	color: #2d4a2d;
+	margin: 6px 0;
+	line-height: 1.35;
+}
+
 /* Form styles */
 .login-form {
 	display: flex;

@@ -4,6 +4,7 @@
 	"type": "module",
 	"main": "index.js",
 	"scripts": {
+		"preinstall": "npx -y only-allow pnpm",
 		"start": "node index.js",
 		"format": "prettier --write ."
 	},
@@ -23,6 +24,7 @@
 		"node": ">=20.0.0 <22.0.0",
 		"pnpm": ">=9.0.0"
 	},
+	"packageManager": "pnpm@9.0.0",
 	"dependencies": {
 		"@mercuryworkshop/bare-mux": "^2.1.7",
 		"@mercuryworkshop/epoxy-transport": "2.1.27",
