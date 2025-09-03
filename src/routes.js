@@ -229,6 +229,120 @@ router.get('/password', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public/password.html'));
 });
 
+router.get('/gambling', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public/gambling.html'));
+});
+
+// Gambling API endpoints
+router.post('/api/gambling/bet', (req, res) => {
+	try {
+		const { username, token, gameType, betAmount, gameData } = req.body;
+		
+		if (!username || !token || !gameType || !betAmount) {
+			return res.status(400).json({ success: false, error: 'Missing required fields' });
+		}
+
+		if (!userManager.isValidSession(username, token)) {
+			return res.status(401).json({ success: false, error: 'Invalid session' });
+		}
+
+		// Get user and check credits
+		const user = userManager.getUser(username);
+		if (!user) {
+			return res.status(404).json({ success: false, error: 'User not found' });
+		}
+
+		// Calculate remaining days as credits
+		const now = new Date();
+		const expiration = new Date(user.expirationDate);
+		const currentCredits = Math.max(0, Math.ceil((expiration - now) / (1000 * 60 * 60 * 24)));
+
+		if (betAmount > currentCredits) {
+			return res.status(400).json({ success: false, error: 'Insufficient credits' });
+		}
+
+		// Process game result (simplified - in real implementation, you'd have proper game logic)
+		const gameResult = processGameResult(gameType, betAmount, gameData);
+		
+		// Update user's expiration date based on winnings/losses
+		const creditChange = gameResult.winnings - betAmount;
+		const newExpiration = new Date(expiration.getTime() + (creditChange * 24 * 60 * 60 * 1000));
+		
+		userManager.updateUserExpiration(username, newExpiration);
+
+		res.json({
+			success: true,
+			result: gameResult,
+			newCredits: Math.max(0, Math.ceil((newExpiration - now) / (1000 * 60 * 60 * 24)))
+		});
+
+	} catch (error) {
+		console.error('Error processing gambling bet:', error);
+		res.status(500).json({ success: false, error: 'Internal server error' });
+	}
+});
+
+// Helper function to process game results
+function processGameResult(gameType, betAmount, gameData) {
+	// This is a simplified version - in a real implementation, you'd have proper game logic
+	// For now, we'll simulate some basic results
+	
+	switch (gameType) {
+		case 'mines':
+			return processMinesResult(betAmount, gameData);
+		case 'crash':
+			return processCrashResult(betAmount, gameData);
+		case 'blackjack':
+			return processBlackjackResult(betAmount, gameData);
+		case 'tower':
+			return processTowerResult(betAmount, gameData);
+		case 'plinko':
+			return processPlinkoResult(betAmount, gameData);
+		case 'aviamaster':
+			return processAviamasterResult(betAmount, gameData);
+		default:
+			return { winnings: 0, multiplier: 0 };
+	}
+}
+
+function processMinesResult(betAmount, gameData) {
+	const { safeTiles, bombs } = gameData;
+	const multiplier = Math.pow(1 + (bombs * 0.1), safeTiles);
+	return { winnings: Math.floor(betAmount * multiplier), multiplier };
+}
+
+function processCrashResult(betAmount, gameData) {
+	const { cashoutMultiplier } = gameData;
+	return { winnings: Math.floor(betAmount * cashoutMultiplier), multiplier: cashoutMultiplier };
+}
+
+function processBlackjackResult(betAmount, gameData) {
+	const { playerTotal, dealerTotal, isBlackjack } = gameData;
+	
+	if (playerTotal > 21) return { winnings: 0, multiplier: 0 };
+	if (dealerTotal > 21) return { winnings: betAmount * 2, multiplier: 2 };
+	if (isBlackjack) return { winnings: Math.floor(betAmount * 2.5), multiplier: 2.5 };
+	if (playerTotal > dealerTotal) return { winnings: betAmount * 2, multiplier: 2 };
+	if (playerTotal === dealerTotal) return { winnings: betAmount, multiplier: 1 };
+	return { winnings: 0, multiplier: 0 };
+}
+
+function processTowerResult(betAmount, gameData) {
+	const { level } = gameData;
+	const multiplier = Math.pow(1.2, level);
+	return { winnings: Math.floor(betAmount * multiplier), multiplier };
+}
+
+function processPlinkoResult(betAmount, gameData) {
+	const { multiplier } = gameData;
+	return { winnings: Math.floor(betAmount * multiplier), multiplier };
+}
+
+function processAviamasterResult(betAmount, gameData) {
+	const { cashoutMultiplier } = gameData;
+	return { winnings: Math.floor(betAmount * cashoutMultiplier), multiplier: cashoutMultiplier };
+}
+
 router.use((req, res, next) => {
 	res.status(404).sendFile(path.join(__dirname, 'public/err.html'));
 });

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Veldrith - Gambling</title>
+		<link rel="icon" type="icon/x-icon" href="/assets/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="Veldrith Gambling - Play games with your credits" />
+		<link rel="stylesheet" href="/css/index.css" />
+		<link rel="stylesheet" href="/css/themes.css" />
+		<link rel="stylesheet" href="/css/gambling.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..400,0..1" />
+		<script src="https://unpkg.com/lucide@latest"></script>
+	</head>
+	<body>
+		<div class="particles-container">
+			<div class="layer back"></div>
+			<div class="layer mid"></div>
+			<div class="layer front"></div>
+		</div>
+
+		<!-- Navigation -->
+		<ul class="navbar">
+			<li style="margin-left: -1px; margin-top: 2px">
+				<a href="/"><img class="logo" src="/assets/logo.webp" alt="Logo" /></a>
+			</li>
+			<hr style="margin-top: 5px" />
+			<li>
+				<a href="/"><span class="material-symbols-outlined">cottage</span></a>
+			</li>
+			<li>
+				<a href="/g"><span class="material-symbols-outlined">joystick</span></a>
+			</li>
+			<li>
+				<a href="/a"><span class="material-symbols-outlined">apps</span></a>
+			</li>
+			<li>
+				<a href="/&"><span class="material-symbols-outlined">public</span></a>
+			</li>
+			<hr />
+			<li>
+				<a href="/~"><span class="material-symbols-outlined">tune</span></a>
+			</li>
+		</ul>
+
+		<!-- Credit Display -->
+		<div class="credit-display">
+			<div class="credit-info">
+				<span class="material-symbols-outlined">account_balance_wallet</span>
+				<span id="creditAmount">0</span> Credits
+			</div>
+		</div>
+
+		<!-- Main Content -->
+		<div class="gambling-container">
+			<div class="gambling-header">
+				<h1>🎰 Veldrith Casino</h1>
+				<p>Play with your credits and win more days!</p>
+			</div>
+
+			<!-- Game Selection -->
+			<div class="games-grid">
+				<div class="game-card" data-game="mines">
+					<div class="game-icon">💣</div>
+					<h3>Mines</h3>
+					<p>Reveal gems, avoid bombs</p>
+				</div>
+
+				<div class="game-card" data-game="crash">
+					<div class="game-icon">🚀</div>
+					<h3>Crash</h3>
+					<p>Cash out before it crashes</p>
+				</div>
+
+				<div class="game-card" data-game="blackjack">
+					<div class="game-icon">🃏</div>
+					<h3>Blackjack</h3>
+					<p>Get closer to 21</p>
+				</div>
+
+				<div class="game-card" data-game="tower">
+					<div class="game-icon">🏰</div>
+					<h3>Tower</h3>
+					<p>Climb to the top</p>
+				</div>
+
+				<div class="game-card" data-game="plinko">
+					<div class="game-icon">🎲</div>
+					<h3>Plinko</h3>
+					<p>Drop the ball</p>
+				</div>
+
+				<div class="game-card" data-game="aviamaster">
+					<div class="game-icon">✈️</div>
+					<h3>Aviamaster</h3>
+					<p>Fly high, land safe</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Game Modals -->
+		<div id="gameModal" class="game-modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 id="modalTitle">Game</h2>
+					<button class="close-modal">&times;</button>
+				</div>
+				<div class="modal-body" id="modalBody">
+					<!-- Game content will be loaded here -->
+				</div>
+			</div>
+		</div>
+
+		<script src="/js/auth-guard.js"></script>
+		<script src="/js/gambling.js"></script>
+	</body>
+</html>

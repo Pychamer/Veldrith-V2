@@ -298,6 +298,16 @@ class UserManager {
 			console.log(`Cleaned up ${beforeCount - afterCount} expired users`);
 		}
 	}
+
+	updateUserExpiration(username, newExpirationDate) {
+		const user = this.getUser(username);
+		if (user) {
+			user.expiresAt = newExpirationDate.toISOString();
+			this.saveUsers();
+			return true;
+		}
+		return false;
+	}
 }
 
 export default UserManager;
