@@ -54,6 +54,39 @@ class GamblingSystem {
 		return min + (num * (max - min));
 	}
 
+	generateRealisticCrashPoint(seed) {
+		// Generate a realistic crash point distribution
+		// Most crashes happen at low multipliers, few at high multipliers
+		const random = this.generateProvablyFairNumber(seed, 0, 1);
+		
+		// Weighted distribution for realistic crash points
+		if (random < 0.15) {
+			// 15% chance: crash between 1.00x - 1.50x
+			return 1 + this.generateProvablyFairNumber(seed + '1', 0, 0.5);
+		} else if (random < 0.35) {
+			// 20% chance: crash between 1.50x - 2.00x
+			return 1.5 + this.generateProvablyFairNumber(seed + '2', 0, 0.5);
+		} else if (random < 0.55) {
+			// 20% chance: crash between 2.00x - 3.00x
+			return 2 + this.generateProvablyFairNumber(seed + '3', 0, 1);
+		} else if (random < 0.70) {
+			// 15% chance: crash between 3.00x - 5.00x
+			return 3 + this.generateProvablyFairNumber(seed + '4', 0, 2);
+		} else if (random < 0.85) {
+			// 15% chance: crash between 5.00x - 10.00x
+			return 5 + this.generateProvablyFairNumber(seed + '5', 0, 5);
+		} else if (random < 0.95) {
+			// 10% chance: crash between 10.00x - 25.00x
+			return 10 + this.generateProvablyFairNumber(seed + '6', 0, 15);
+		} else if (random < 0.99) {
+			// 4% chance: crash between 25.00x - 50.00x
+			return 25 + this.generateProvablyFairNumber(seed + '7', 0, 25);
+		} else {
+			// 1% chance: crash between 50.00x - 100.00x
+			return 50 + this.generateProvablyFairNumber(seed + '8', 0, 50);
+		}
+	}
+
 	displayProvablyFairInfo(gameSeed) {
 		// Add provably fair info to the modal
 		let fairInfoDiv = document.getElementById('provablyFairInfo');
@@ -487,8 +520,9 @@ class GamblingSystem {
 		// Display provably fair info
 		this.displayProvablyFairInfo(gameSeed);
 		
-		// Generate crash point using provably fair system (1.00x to 100.00x)
-		const crashPoint = 1 + this.generateProvablyFairNumber(gameSeed.serverSeed + gameSeed.clientSeed, 0, 99);
+		// Generate realistic crash point using provably fair system
+		// Most crashes happen at low multipliers (1.00x - 5.00x)
+		const crashPoint = this.generateRealisticCrashPoint(gameSeed.serverSeed + gameSeed.clientSeed);
 		
 		// Start multiplier animation
 		let multiplier = 1.00;
@@ -1320,8 +1354,8 @@ class GamblingSystem {
 		// Display provably fair info
 		this.displayProvablyFairInfo(gameSeed);
 		
-		// Generate crash point using provably fair system
-		const crashPoint = 1 + this.generateProvablyFairNumber(gameSeed.serverSeed + gameSeed.clientSeed, 0, 99);
+		// Generate realistic crash point using provably fair system
+		const crashPoint = this.generateRealisticCrashPoint(gameSeed.serverSeed + gameSeed.clientSeed);
 		
 		// Start game
 		let multiplier = 1.00;
