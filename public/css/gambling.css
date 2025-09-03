@@ -413,51 +413,121 @@
 	background: #d32f2f;
 }
 
-/* Plinko Game */
+/* Plinko Game (EXACT Rainbet Version) */
+.plinko-game-area {
+	text-align: center;
+	margin: 30px 0;
+}
+
+.plinko-board-container {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	margin: 20px 0;
+}
+
 .plinko-board {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin: 20px 0;
+	gap: 8px;
+	padding: 20px;
+	background: linear-gradient(135deg, #1a1a2e, #16213e);
+	border-radius: 15px;
+	position: relative;
+	border: 2px solid #4a7c59;
 }
 
 .plinko-row {
 	display: flex;
-	gap: 5px;
-	margin-bottom: 5px;
+	justify-content: center;
+	gap: 8px;
 }
 
 .plinko-peg {
-	width: 8px;
-	height: 8px;
+	width: 12px;
+	height: 12px;
 	background: #4a7c59;
 	border-radius: 50%;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+	transition: all 0.2s ease;
+}
+
+.plinko-peg:hover {
+	background: #5a8c69;
+	transform: scale(1.1);
+}
+
+.plinko-slots {
+	display: flex;
+	justify-content: center;
+	gap: 4px;
+	margin-top: 10px;
 }
 
 .plinko-slot {
-	width: 40px;
-	height: 30px;
-	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	border-radius: 5px;
+	width: 50px;
+	height: 40px;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 0.8rem;
-	color: #4a7c59;
+	font-size: 0.9rem;
+	color: white;
 	font-weight: bold;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+	transition: all 0.3s ease;
+}
+
+.plinko-slot.winning {
+	transform: scale(1.2);
+	box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+	animation: slotWin 1s ease-in-out;
 }
 
 .plinko-ball {
-	width: 12px;
-	height: 12px;
-	background: #ffd700;
+	width: 20px;
+	height: 20px;
+	background: radial-gradient(circle, #ff6b6b, #ee5a24);
 	border-radius: 50%;
 	position: absolute;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+	z-index: 10;
 	transition: all 0.1s ease;
+	display: none;
 }
 
-/* Aviamaster Game */
+.plinko-result {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin: 20px 0;
+	padding: 15px;
+	background: rgba(74, 124, 89, 0.2);
+	border-radius: 10px;
+	border: 1px solid #4a7c59;
+	transition: all 0.3s ease;
+}
+
+.plinko-result.win {
+	background: rgba(76, 175, 80, 0.2);
+	border-color: #4caf50;
+	color: #4caf50;
+}
+
+.plinko-result.loss {
+	background: rgba(244, 67, 54, 0.2);
+	border-color: #f44336;
+	color: #f44336;
+}
+
+@keyframes slotWin {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.3); }
+	100% { transform: scale(1.2); }
+}
+
+/* Aviamaster Game (EXACT Stake Version) */
 .aviamaster-display {
 	text-align: center;
 	margin: 30px 0;
@@ -466,55 +536,110 @@
 .aviamaster-game-area {
 	position: relative;
 	width: 100%;
-	height: 300px;
-	background: linear-gradient(to bottom, #87CEEB 0%, #98D8E8 50%, #B0E0E6 100%);
+	height: 400px;
+	background: linear-gradient(to bottom, #87CEEB 0%, #4682B4 100%);
 	border-radius: 15px;
 	overflow: hidden;
 	margin: 20px 0;
+	border: 3px solid #2c3e50;
 }
 
-.aviamaster-sky {
+.aviamaster-ocean {
 	position: relative;
-	width: 100%;
-	height: 250px;
-	overflow: hidden;
+	height: 100%;
+	background: linear-gradient(to bottom, #87CEEB 0%, #4682B4 50%, #1e3a8a 100%);
 }
 
-.aviamaster-ground {
+.aviamaster-ship {
 	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 50px;
-	background: linear-gradient(to bottom, #8B4513, #A0522D);
-}
-
-.aviamaster-runway {
-	position: absolute;
-	bottom: 10px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 200px;
-	height: 20px;
-	background: #696969;
-	border-radius: 10px;
+	bottom: 20px;
+	right: 50px;
+	font-size: 3rem;
+	z-index: 3;
+	animation: shipFloat 3s ease-in-out infinite;
 }
 
 .aviamaster-plane {
-	font-size: 2.5rem;
 	position: absolute;
 	left: 50px;
-	top: 50%;
-	transform: translateY(-50%);
-	transition: all 0.1s ease;
+	top: 150px;
+	font-size: 2.5rem;
+	transition: transform 0.1s ease;
 	z-index: 10;
+	filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
 }
 
-.aviamaster-multiplier {
-	font-size: 2rem;
+.aviamaster-hud {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	background: rgba(0, 0, 0, 0.7);
+	border-radius: 10px;
+	padding: 10px;
+	display: flex;
+	gap: 20px;
+	z-index: 15;
+}
+
+.hud-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+}
+
+.hud-label {
+	font-size: 0.8rem;
+	color: #ccc;
+}
+
+.hud-value {
+	font-size: 1.2rem;
 	font-weight: bold;
-	color: #4a7c59;
-	margin: 10px 0;
-	text-shadow: 0 0 10px rgba(74, 124, 89, 0.5);
+	color: #fff;
+}
+
+.aviamaster-multipliers,
+.aviamaster-rockets,
+.aviamaster-clouds {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.aviamaster-multiplier-item {
+	animation: multiplierFloat 3s ease-in-out infinite;
+}
+
+.aviamaster-rocket-item {
+	animation: rocketFloat 2s ease-in-out infinite;
+}
+
+.aviamaster-cloud {
+	animation: cloudFloat 8s ease-in-out infinite;
+}
+
+@keyframes shipFloat {
+	0%, 100% { transform: translateY(0px); }
+	50% { transform: translateY(-5px); }
+}
+
+@keyframes multiplierFloat {
+	0%, 100% { transform: translateY(0px) scale(1); }
+	50% { transform: translateY(-8px) scale(1.1); }
+}
+
+@keyframes rocketFloat {
+	0%, 100% { transform: translateY(0px) rotate(0deg); }
+	50% { transform: translateY(-6px) rotate(3deg); }
+}
+
+@keyframes cloudFloat {
+	0%, 100% { transform: translateX(0px); opacity: 0.7; }
+	50% { transform: translateX(10px); opacity: 0.9; }
 }
 
 .aviamaster-obstacles {
