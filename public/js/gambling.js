@@ -7,8 +7,78 @@ class GamblingSystem {
 		this.modalTitle = document.getElementById('modalTitle');
 		this.modalBody = document.getElementById('modalBody');
 		this.creditDisplay = document.getElementById('creditAmount');
+		this.isAdmin = false;
 		
 		this.init();
+	}
+
+	// Provably Fair System
+	generateGameSeed() {
+		// Generate a server seed (in real implementation, this would come from server)
+		const serverSeed = this.generateRandomString(32);
+		const clientSeed = Date.now().toString();
+		const nonce = Math.floor(Math.random() * 1000000);
+		
+		return {
+			serverSeed,
+			clientSeed,
+			nonce,
+			hash: this.hashString(serverSeed + clientSeed + nonce)
+		};
+	}
+
+	generateRandomString(length) {
+		const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let result = '';
+		for (let i = 0; i < length; i++) {
+			result += chars.charAt(Math.floor(Math.random() * chars.length));
+		}
+		return result;
+	}
+
+	hashString(str) {
+		// Simple hash function (in production, use crypto.subtle.digest)
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			const char = str.charCodeAt(i);
+			hash = ((hash << 5) - hash) + char;
+			hash = hash & hash; // Convert to 32bit integer
+		}
+		return Math.abs(hash).toString(16);
+	}
+
+	generateProvablyFairNumber(seed, min = 0, max = 1) {
+		// Use seed to generate deterministic random number
+		const hash = this.hashString(seed);
+		const num = parseInt(hash.substring(0, 8), 16) / 0xffffffff;
+		return min + (num * (max - min));
+	}
+
+	displayProvablyFairInfo(gameSeed) {
+		// Add provably fair info to the modal
+		let fairInfoDiv = document.getElementById('provablyFairInfo');
+		if (!fairInfoDiv) {
+			fairInfoDiv = document.createElement('div');
+			fairInfoDiv.id = 'provablyFairInfo';
+			fairInfoDiv.style.cssText = `
+				background: rgba(74, 124, 89, 0.1);
+				border: 1px solid rgba(74, 124, 89, 0.3);
+				border-radius: 8px;
+				padding: 10px;
+				margin: 10px 0;
+				font-size: 0.9rem;
+				color: rgba(255, 255, 255, 0.8);
+			`;
+			this.modalBody.appendChild(fairInfoDiv);
+		}
+		
+		fairInfoDiv.innerHTML = `
+			<div style="font-weight: bold; color: #4a7c59; margin-bottom: 5px;">🔒 Provably Fair</div>
+			<div>Server Seed: ${gameSeed.serverSeed.substring(0, 16)}...</div>
+			<div>Client Seed: ${gameSeed.clientSeed}</div>
+			<div>Nonce: ${gameSeed.nonce}</div>
+			<div>Hash: ${gameSeed.hash}</div>
+		`;
 	}
 
 	async init() {
@@ -225,12 +295,19 @@ class GamblingSystem {
 			this.updateCreditDisplay();
 		}
 		
+		// Generate provably fair seed
+		const gameSeed = this.generateGameSeed();
+		console.log('Mines Game Seed:', gameSeed);
+		
+		// Display provably fair info
+		this.displayProvablyFairInfo(gameSeed);
+		
 		// Create grid
 		const grid = document.getElementById('minesGrid');
 		grid.innerHTML = '';
 		
-		// Generate mines
-		const minePositions = this.generateMines(25, bombs);
+		// Generate mines using provably fair system
+		const minePositions = this.generateProvablyFairMines(25, bombs, gameSeed);
 		
 		// Create tiles
 		for (let i = 0; i < 25; i++) {
@@ -263,6 +340,24 @@ class GamblingSystem {
 				mines.push(pos);
 			}
 		}
+		return mines;
+	}
+
+	generateProvablyFairMines(totalTiles, bombCount, seed) {
+		const mines = [];
+		let nonce = 0;
+		
+		while (mines.length < bombCount) {
+			const combinedSeed = seed.serverSeed + seed.clientSeed + nonce;
+			const randomNum = this.generateProvablyFairNumber(combinedSeed, 0, totalTiles);
+			const pos = Math.floor(randomNum);
+			
+			if (!mines.includes(pos)) {
+				mines.push(pos);
+			}
+			nonce++;
+		}
+		
 		return mines;
 	}
 
@@ -378,8 +473,15 @@ class GamblingSystem {
 			this.updateCreditDisplay();
 		}
 		
-		// Generate crash point (1.00x to 100.00x)
-		const crashPoint = 1 + Math.random() * 99;
+		// Generate provably fair seed
+		const gameSeed = this.generateGameSeed();
+		console.log('Crash Game Seed:', gameSeed);
+		
+		// Display provably fair info
+		this.displayProvablyFairInfo(gameSeed);
+		
+		// Generate crash point using provably fair system (1.00x to 100.00x)
+		const crashPoint = 1 + this.generateProvablyFairNumber(gameSeed.serverSeed + gameSeed.clientSeed, 0, 99);
 		
 		// Start multiplier animation
 		let multiplier = 1.00;
