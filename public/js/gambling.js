@@ -387,9 +387,13 @@ class GamblingSystem {
 	}
 
 	calculateMinesMultiplier(safeTiles, bombs) {
-		// More bombs = higher multiplier per safe tile
-		const baseMultiplier = 1 + (bombs * 0.1);
-		return Math.pow(baseMultiplier, safeTiles);
+		// More balanced multiplier calculation
+		// Base multiplier increases more gradually
+		const baseMultiplier = 1 + (bombs * 0.05); // Reduced from 0.1 to 0.05
+		const multiplier = Math.pow(baseMultiplier, safeTiles);
+		
+		// Cap the multiplier to prevent extreme values
+		return Math.min(multiplier, 1000); // Max 1000x multiplier
 	}
 
 	cashOutMines() {
@@ -434,7 +438,10 @@ class GamblingSystem {
 				</div>
 			</div>
 			<div class="crash-display">
-				<div class="crash-rocket">🚀</div>
+				<div class="crash-rocket" id="crashRocket">
+					<div class="rocket-body"></div>
+					<div class="rocket-flame"></div>
+				</div>
 				<div class="crash-multiplier" id="crashMultiplier">1.00x</div>
 				<div class="crash-actions" style="display: none;">
 					<button class="game-button success" id="crashCashOut">Cash Out</button>
@@ -899,27 +906,72 @@ class GamblingSystem {
 		// Clear previous levels
 		levelsDiv.innerHTML = '';
 		
-		// Generate current level
-		const levelDiv = document.createElement('div');
-		levelDiv.className = 'tower-level';
-		
-		// 3-4 tiles per level, one safe
-		const tileCount = 3 + Math.floor(Math.random() * 2);
-		const safeTile = Math.floor(Math.random() * tileCount);
-		
-		for (let i = 0; i < tileCount; i++) {
-			const tile = document.createElement('div');
-			tile.className = 'tower-tile';
-			tile.dataset.safe = i === safeTile;
+		// Generate all levels up to current level
+		for (let level = 0; level <= state.level; level++) {
+			const levelDiv = document.createElement('div');
+			levelDiv.className = 'tower-level';
+			levelDiv.style.cssText = `
+				display: flex;
+				justify-content: center;
+				gap: 15px;
+				margin: 10px 0;
+				position: relative;
+			`;
 			
-			tile.addEventListener('click', () => {
-				this.selectTowerTile(tile);
-			});
+			// Always 4 tiles per level (like Stake)
+			const tileCount = 4;
+			const safeTile = Math.floor(Math.random() * tileCount);
 			
-			levelDiv.appendChild(tile);
+			for (let i = 0; i < tileCount; i++) {
+				const tile = document.createElement('div');
+				tile.className = 'tower-tile';
+				tile.dataset.safe = i === safeTile;
+				tile.dataset.level = level;
+				tile.dataset.index = i;
+				
+				tile.style.cssText = `
+					width: 60px;
+					height: 60px;
+					background: ${level < state.level ? '#4a7c59' : 'rgba(255, 255, 255, 0.1)'};
+					border: 2px solid ${level < state.level ? '#6b8e23' : 'rgba(255, 255, 255, 0.3)'};
+					border-radius: 12px;
+					cursor: ${level === state.level ? 'pointer' : 'default'};
+					transition: all 0.3s ease;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 1.2rem;
+					position: relative;
+					overflow: hidden;
+				`;
+				
+				// Add visual effects for completed levels
+				if (level < state.level) {
+					tile.innerHTML = '✓';
+					tile.style.color = 'white';
+					tile.style.boxShadow = '0 0 20px rgba(74, 124, 89, 0.5)';
+				} else if (level === state.level) {
+					// Current level - add hover effects
+					tile.addEventListener('mouseenter', () => {
+						tile.style.background = 'rgba(255, 255, 255, 0.2)';
+						tile.style.transform = 'scale(1.05)';
+					});
+					
+					tile.addEventListener('mouseleave', () => {
+						tile.style.background = 'rgba(255, 255, 255, 0.1)';
+						tile.style.transform = 'scale(1)';
+					});
+					
+					tile.addEventListener('click', () => {
+						this.selectTowerTile(tile);
+					});
+				}
+				
+				levelDiv.appendChild(tile);
+			}
+			
+			levelsDiv.appendChild(levelDiv);
 		}
-		
-		levelsDiv.appendChild(levelDiv);
 		
 		// Update display
 		document.getElementById('towerLevel').textContent = state.level + 1;
@@ -930,14 +982,22 @@ class GamblingSystem {
 		const state = this.towerGameState;
 		
 		if (tile.dataset.safe === 'true') {
-			// Safe tile - advance to next level
-			tile.classList.add('safe');
+			// Safe tile - mark as safe and advance
+			tile.style.background = '#4a7c59';
+			tile.style.borderColor = '#6b8e23';
+			tile.style.color = 'white';
+			tile.innerHTML = '✓';
+			tile.style.boxShadow = '0 0 20px rgba(74, 124, 89, 0.5)';
+			
+			// Advance to next level
 			state.level++;
 			state.multiplier = Math.pow(1.2, state.level);
 			
 			if (state.level >= 10) {
 				// Reached the top
-				this.cashOutTower();
+				setTimeout(() => {
+					this.cashOutTower();
+				}, 1000);
 			} else {
 				// Generate next level
 				setTimeout(() => {
@@ -946,8 +1006,15 @@ class GamblingSystem {
 			}
 		} else {
 			// Trap - game over
-			tile.classList.add('trap');
-			this.endTowerGame();
+			tile.style.background = '#d32f2f';
+			tile.style.borderColor = '#f44336';
+			tile.style.color = 'white';
+			tile.innerHTML = '💥';
+			tile.style.boxShadow = '0 0 20px rgba(211, 47, 47, 0.5)';
+			
+			setTimeout(() => {
+				this.endTowerGame();
+			}, 1000);
 		}
 	}
 
@@ -1090,10 +1157,70 @@ class GamblingSystem {
 		// Generate new board
 		this.generatePlinkoBoard(rows);
 		
-		// Simulate ball drop
+		// Animate ball drop with physics
+		this.animatePlinkoBall(rows, risk, bet);
+	}
+
+	animatePlinkoBall(rows, risk, bet) {
+		const board = document.getElementById('plinkoBoard');
+		const ball = document.createElement('div');
+		ball.className = 'plinko-ball';
+		ball.style.cssText = `
+			position: absolute;
+			width: 12px;
+			height: 12px;
+			background: radial-gradient(circle, #ffd700, #ffed4e);
+			border-radius: 50%;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+			z-index: 1000;
+			top: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			transition: all 0.1s ease;
+		`;
+		
+		board.appendChild(ball);
+		
+		// Simulate realistic ball physics
+		let currentRow = 0;
+		let currentCol = Math.floor(rows / 2); // Start in middle
+		const slotWidth = 40;
+		const rowHeight = 30;
+		const boardWidth = rows * slotWidth;
+		const startX = (boardWidth / 2) - (slotWidth / 2);
+		
+		const animateStep = () => {
+			if (currentRow >= rows) {
+				// Ball reached bottom - determine final slot
+				const finalSlot = Math.max(0, Math.min(rows, Math.floor(currentCol)));
+				this.finishPlinkoGame(finalSlot, risk, bet);
+				ball.remove();
+				return;
+			}
+			
+			// Simulate physics - ball bounces left or right randomly
+			const bounceDirection = Math.random() < 0.5 ? -1 : 1;
+			currentCol += bounceDirection * 0.5;
+			
+			// Update ball position
+			const x = startX + (currentCol * slotWidth);
+			const y = 20 + (currentRow * rowHeight);
+			
+			ball.style.left = x + 'px';
+			ball.style.top = y + 'px';
+			
+			currentRow += 0.1;
+			
+			// Continue animation
+			setTimeout(animateStep, 50);
+		};
+		
+		animateStep();
+	}
+
+	finishPlinkoGame(finalSlot, risk, bet) {
 		const slots = document.querySelectorAll('.plinko-slot');
-		const randomSlot = Math.floor(Math.random() * slots.length);
-		const multiplier = parseFloat(slots[randomSlot].dataset.multiplier);
+		const multiplier = parseFloat(slots[finalSlot].dataset.multiplier);
 		
 		const winnings = Math.floor(bet * multiplier);
 		if (!this.isAdmin) {
@@ -1101,18 +1228,30 @@ class GamblingSystem {
 			this.updateCreditDisplay();
 		}
 		
+		// Highlight the winning slot
+		slots[finalSlot].style.background = '#4a7c59';
+		slots[finalSlot].style.color = 'white';
+		slots[finalSlot].style.transform = 'scale(1.1)';
+		
 		// Show result
 		const resultDiv = document.getElementById('plinkoResult');
 		resultDiv.innerHTML = `
 			<div style="text-align: center; margin-top: 20px; padding: 20px; background: rgba(74, 124, 89, 0.2); border-radius: 10px;">
-				<h3>Ball landed in slot ${randomSlot + 1}</h3>
+				<h3>Ball landed in slot ${finalSlot + 1}</h3>
 				<div style="font-size: 2rem; color: #4a7c59; font-weight: bold;">${multiplier}x</div>
 				<div>Won ${winnings} credits!</div>
 			</div>
 		`;
+		
+		// Reset slot highlighting after 3 seconds
+		setTimeout(() => {
+			slots[finalSlot].style.background = 'rgba(255, 255, 255, 0.1)';
+			slots[finalSlot].style.color = '#4a7c59';
+			slots[finalSlot].style.transform = 'scale(1)';
+		}, 3000);
 	}
 
-	// Aviamaster Game
+	// Aviamaster Game (Stake Version)
 	openAviamasterGame() {
 		this.modalTitle.textContent = '✈️ Aviamaster';
 		this.modalBody.innerHTML = `
@@ -1126,9 +1265,17 @@ class GamblingSystem {
 				</div>
 			</div>
 			<div class="aviamaster-display">
-				<div class="aviamaster-plane">✈️</div>
-				<div class="aviamaster-multiplier" id="aviamasterMultiplier">1.00x</div>
-				<div class="aviamaster-obstacles" id="aviamasterObstacles"></div>
+				<div class="aviamaster-game-area">
+					<div class="aviamaster-sky">
+						<div class="aviamaster-plane" id="aviamasterPlane">✈️</div>
+						<div class="aviamaster-multiplier" id="aviamasterMultiplier">1.00x</div>
+						<div class="aviamaster-obstacles" id="aviamasterObstacles"></div>
+						<div class="aviamaster-collectibles" id="aviamasterCollectibles"></div>
+					</div>
+					<div class="aviamaster-ground">
+						<div class="aviamaster-runway"></div>
+					</div>
+				</div>
 				<div class="aviamaster-actions" style="display: none;">
 					<button class="game-button success" id="aviamasterCashOut">Land</button>
 				</div>
@@ -1166,14 +1313,25 @@ class GamblingSystem {
 			this.updateCreditDisplay();
 		}
 		
-		// Generate crash point
-		const crashPoint = 1 + Math.random() * 99;
+		// Generate provably fair seed
+		const gameSeed = this.generateGameSeed();
+		console.log('Aviamaster Game Seed:', gameSeed);
+		
+		// Display provably fair info
+		this.displayProvablyFairInfo(gameSeed);
+		
+		// Generate crash point using provably fair system
+		const crashPoint = 1 + this.generateProvablyFairNumber(gameSeed.serverSeed + gameSeed.clientSeed, 0, 99);
 		
 		// Start game
 		let multiplier = 1.00;
+		let planePosition = 0;
+		let collectibles = [];
 		let obstacles = [];
 		const multiplierElement = document.getElementById('aviamasterMultiplier');
+		const planeElement = document.getElementById('aviamasterPlane');
 		const obstaclesElement = document.getElementById('aviamasterObstacles');
+		const collectiblesElement = document.getElementById('aviamasterCollectibles');
 		const cashOutBtn = document.getElementById('aviamasterCashOut');
 		
 		// Show game controls
@@ -1182,19 +1340,76 @@ class GamblingSystem {
 		
 		const gameInterval = setInterval(() => {
 			multiplier += 0.01;
+			planePosition += 2;
+			
+			// Update multiplier display
 			multiplierElement.textContent = multiplier.toFixed(2) + 'x';
 			
-			// Randomly add obstacles
-			if (Math.random() < 0.1) {
+			// Move plane
+			planeElement.style.transform = `translateX(${planePosition}px) translateY(${Math.sin(planePosition * 0.01) * 10}px)`;
+			
+			// Add collectibles (multipliers)
+			if (Math.random() < 0.15) {
+				const collectible = document.createElement('div');
+				collectible.className = 'aviamaster-collectible';
+				collectible.style.cssText = `
+					position: absolute;
+					left: ${planePosition + 200}px;
+					top: ${50 + Math.random() * 100}px;
+					width: 20px;
+					height: 20px;
+					background: #ffd700;
+					border-radius: 50%;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 0.8rem;
+					color: #000;
+					font-weight: bold;
+					animation: collectibleFloat 2s ease-in-out infinite;
+				`;
+				
+				const collectibleValue = Math.random() < 0.5 ? '+1' : '×2';
+				collectible.textContent = collectibleValue;
+				collectible.dataset.value = collectibleValue;
+				
+				collectiblesElement.appendChild(collectible);
+				collectibles.push(collectible);
+				
+				// Remove old collectibles
+				if (collectibles.length > 8) {
+					const oldCollectible = collectibles.shift();
+					oldCollectible.remove();
+				}
+			}
+			
+			// Add obstacles (rockets)
+			if (Math.random() < 0.08) {
 				const obstacle = document.createElement('div');
-				obstacle.className = 'obstacle';
-				obstacle.textContent = Math.random() < 0.5 ? '🚀' : '💥';
-				obstacle.dataset.type = Math.random() < 0.5 ? 'rocket' : 'explosion';
+				obstacle.className = 'aviamaster-obstacle';
+				obstacle.style.cssText = `
+					position: absolute;
+					left: ${planePosition + 150}px;
+					top: ${50 + Math.random() * 100}px;
+					width: 30px;
+					height: 30px;
+					background: #d32f2f;
+					border-radius: 4px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-size: 1.2rem;
+					color: white;
+					animation: obstacleFloat 1.5s ease-in-out infinite;
+				`;
+				obstacle.textContent = '🚀';
+				obstacle.dataset.type = 'rocket';
+				
 				obstaclesElement.appendChild(obstacle);
 				obstacles.push(obstacle);
 				
 				// Remove old obstacles
-				if (obstacles.length > 5) {
+				if (obstacles.length > 6) {
 					const oldObstacle = obstacles.shift();
 					oldObstacle.remove();
 				}
@@ -1211,6 +1426,8 @@ class GamblingSystem {
 			if (multiplier >= crashPoint) {
 				multiplierElement.textContent = 'CRASHED!';
 				multiplierElement.style.color = '#d32f2f';
+				planeElement.style.transform += ' rotate(45deg)';
+				planeElement.style.filter = 'hue-rotate(0deg) saturate(2)';
 				cashOutBtn.disabled = true;
 				clearInterval(gameInterval);
 				
@@ -1218,7 +1435,7 @@ class GamblingSystem {
 					this.endAviamasterGame();
 				}, 2000);
 			}
-		}, 100);
+		}, 50);
 		
 		// Store game state
 		this.aviamasterGameState = {
