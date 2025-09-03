@@ -60,30 +60,27 @@ class GamblingSystem {
 		const random = this.generateProvablyFairNumber(seed, 0, 1);
 		
 		// Weighted distribution for realistic crash points
-		if (random < 0.15) {
-			// 15% chance: crash between 1.00x - 1.50x
-			return 1 + this.generateProvablyFairNumber(seed + '1', 0, 0.5);
-		} else if (random < 0.35) {
-			// 20% chance: crash between 1.50x - 2.00x
-			return 1.5 + this.generateProvablyFairNumber(seed + '2', 0, 0.5);
-		} else if (random < 0.55) {
-			// 20% chance: crash between 2.00x - 3.00x
-			return 2 + this.generateProvablyFairNumber(seed + '3', 0, 1);
-		} else if (random < 0.70) {
-			// 15% chance: crash between 3.00x - 5.00x
-			return 3 + this.generateProvablyFairNumber(seed + '4', 0, 2);
+		if (random < 0.40) {
+			// 40% chance: crash between 1.00x - 1.60x
+			return 1 + this.generateProvablyFairNumber(seed + '1', 0, 0.6);
+		} else if (random < 0.60) {
+			// 20% chance: crash between 1.60x - 2.50x
+			return 1.6 + this.generateProvablyFairNumber(seed + '2', 0, 0.9);
+		} else if (random < 0.75) {
+			// 15% chance: crash between 2.50x - 4.00x
+			return 2.5 + this.generateProvablyFairNumber(seed + '3', 0, 1.5);
 		} else if (random < 0.85) {
-			// 15% chance: crash between 5.00x - 10.00x
-			return 5 + this.generateProvablyFairNumber(seed + '5', 0, 5);
+			// 10% chance: crash between 4.00x - 8.00x
+			return 4 + this.generateProvablyFairNumber(seed + '4', 0, 4);
 		} else if (random < 0.95) {
-			// 10% chance: crash between 10.00x - 25.00x
-			return 10 + this.generateProvablyFairNumber(seed + '6', 0, 15);
+			// 10% chance: crash between 8.00x - 20.00x
+			return 8 + this.generateProvablyFairNumber(seed + '5', 0, 12);
 		} else if (random < 0.99) {
-			// 4% chance: crash between 25.00x - 50.00x
-			return 25 + this.generateProvablyFairNumber(seed + '7', 0, 25);
+			// 4% chance: crash between 20.00x - 50.00x
+			return 20 + this.generateProvablyFairNumber(seed + '6', 0, 30);
 		} else {
 			// 1% chance: crash between 50.00x - 100.00x
-			return 50 + this.generateProvablyFairNumber(seed + '8', 0, 50);
+			return 50 + this.generateProvablyFairNumber(seed + '7', 0, 50);
 		}
 	}
 
