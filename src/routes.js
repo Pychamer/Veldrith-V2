@@ -42,6 +42,10 @@ router.get('/500', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public/500.html'));
 });
 
+router.get('/cousino', (req, res) => {
+	res.sendFile(path.join(__dirname, 'public/cousino.html'));
+});
+
 router.get('/a', (req, res) => {
 	res.sendFile(path.join(__dirname, 'public/a.html'));
 });
